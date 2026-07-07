@@ -6,446 +6,142 @@
   <title>Prompt对比实验室 — 项目介绍</title>
   <style>
     :root {
-      --bg-page: #FAFBFC;
-      --bg-gradient: linear-gradient(160deg, #F0F4FF 0%, #F5F3FF 35%, #FAF5FF 70%, #FFF5FA 100%);
-      --bg-card: rgba(255,255,255,0.55);
-      --bg-card-hover: rgba(255,255,255,0.75);
-      --border: rgba(255,255,255,0.6);
+      --primary: #3B82F6;
+      --primary-light: #EFF6FF;
+      --primary-dark: #2563EB;
+      --success: #10B981;
+      --warning: #F59E0B;
+      --danger: #EF4444;
       --text-primary: #1E293B;
       --text-secondary: #64748B;
-      --text-muted: #94A3B8;
-      --accent: #3B82F6;
-      --accent-2: #8B5CF6;
-      --accent-gradient: linear-gradient(135deg, #3B82F6, #8B5CF6);
-      --font-sans: 'Inter', -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      --text-disabled: #94A3B8;
+      --card-bg: rgba(255,255,255,0.55);
+      --card-border: rgba(255,255,255,0.6);
+      --radius-card: 20px;
+      --radius-btn: 12px;
+      --radius-tag: 999px;
+      --shadow-card: 0 4px 24px rgba(0,0,0,0.03);
+      --shadow-card-hover: 0 8px 32px rgba(0,0,0,0.06);
+      --shadow-header: 0 1px 3px rgba(0,0,0,0.04);
+      --shadow-btn: 0 2px 8px rgba(59,130,246,0.2);
+      --font-stack: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
     }
-
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: var(--font-sans);
-      background: var(--bg-gradient);
-      background-attachment: fixed;
-      color: var(--text-primary);
-      line-height: 1.7;
-      min-height: 100vh;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 2rem 1.5rem;
-    }
-
-    /* ===== Hero ===== */
-    .hero {
-      text-align: center;
-      padding: 3rem 0 2.5rem;
-    }
-
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      padding: 0.35rem 1rem;
-      font-size: 0.8rem;
-      color: var(--text-secondary);
-      margin-bottom: 1.2rem;
-      backdrop-filter: blur(12px);
-    }
-
-    .hero-title {
-      font-size: 2.4rem;
-      font-weight: 800;
-      background: var(--accent-gradient);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: 0.4rem;
-    }
-
-    .hero-subtitle {
-      font-size: 1.1rem;
-      color: var(--text-secondary);
-      font-weight: 500;
-      margin-bottom: 1rem;
-    }
-
-    .hero-desc {
-      font-size: 1rem;
-      color: var(--text-secondary);
-      max-width: 600px;
-      margin: 0 auto 1.8rem;
-      line-height: 1.75;
-    }
-
-    .btn-primary {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: var(--accent-gradient);
-      color: #fff;
-      padding: 0.85rem 2.2rem;
-      border-radius: 12px;
-      font-size: 1.05rem;
-      font-weight: 600;
-      text-decoration: none;
-      box-shadow: 0 4px 16px rgba(59,130,246,0.3);
-      transition: all 0.25s ease;
-      border: none;
-      cursor: pointer;
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 24px rgba(59,130,246,0.4);
-    }
-
-    /* ===== Section ===== */
-    .section {
-      padding: 2rem 0;
-    }
-
-    .section-title {
-      font-size: 1.4rem;
-      font-weight: 700;
-      margin-bottom: 1.2rem;
-      color: var(--text-primary);
-    }
-
-    /* ===== Feature Grid ===== */
-    .feature-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1rem;
-    }
-
-    .feature-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 1.4rem;
-      backdrop-filter: blur(12px);
-      transition: all 0.25s ease;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.03);
-    }
-
-    .feature-card:hover {
-      background: var(--bg-card-hover);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.06);
-    }
-
-    .feature-icon {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .feature-name {
-      font-size: 1.05rem;
-      font-weight: 600;
-      margin-bottom: 0.4rem;
-    }
-
-    .feature-desc {
-      font-size: 0.88rem;
-      color: var(--text-secondary);
-      line-height: 1.6;
-    }
-
-    /* ===== Scoring Flow ===== */
-    .scoring-flow {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-      padding: 1.5rem;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      backdrop-filter: blur(12px);
-    }
-
-    .flow-step {
-      text-align: center;
-      padding: 0.6rem 1rem;
-      border-radius: 10px;
-      font-size: 0.85rem;
-      font-weight: 500;
-    }
-
-    .flow-step.input { background: rgba(59,130,246,0.1); color: var(--accent); }
-    .flow-step.models { background: rgba(139,92,246,0.1); color: var(--accent-2); }
-    .flow-step.judge { background: rgba(16,185,129,0.1); color: #10B981; }
-    .flow-step.result { background: rgba(245,158,11,0.1); color: #F59E0B; }
-
-    .flow-arrow {
-      color: var(--text-muted);
-      font-size: 1.2rem;
-    }
-
-    /* ===== AI Standard ===== */
-    .ai-standard {
-      padding: 1.5rem;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      backdrop-filter: blur(12px);
-      margin-top: 1rem;
-    }
-
-    .ai-standard-title {
-      font-size: 1rem;
-      font-weight: 600;
-      margin-bottom: 0.8rem;
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-    }
-
-    .ai-standard-steps {
-      display: flex;
-      flex-direction: column;
-      gap: 0.6rem;
-    }
-
-    .ai-standard-step {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.6rem;
-      font-size: 0.88rem;
-      color: var(--text-secondary);
-    }
-
-    .step-num {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      background: var(--accent-gradient);
-      color: #fff;
-      font-size: 0.72rem;
-      font-weight: 700;
-      flex-shrink: 0;
-      margin-top: 1px;
-    }
-
-    /* ===== Tech Stack ===== */
-    .tech-stack {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
-
-    .tech-tag {
-      display: inline-block;
-      padding: 0.3rem 0.9rem;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      font-size: 0.82rem;
-      color: var(--text-secondary);
-      font-weight: 500;
-    }
-
-    /* ===== Footer CTA ===== */
-    .footer-cta {
-      text-align: center;
-      padding: 2.5rem 0;
-      margin-top: 1.5rem;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      backdrop-filter: blur(12px);
-    }
-
-    .footer-cta-title {
-      font-size: 1.5rem;
-      font-weight: 700;
-      margin-bottom: 0.5rem;
-    }
-
-    .footer-cta-desc {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      margin-bottom: 1.5rem;
-    }
-
-    .footer-meta {
-      margin-top: 2rem;
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      opacity: 0.7;
-      text-align: center;
-    }
-
-    /* ===== Responsive ===== */
-    @media (max-width: 768px) {
-      .container { padding: 1.5rem 1rem; }
-      .hero { padding: 2rem 0 1.5rem; }
-      .hero-title { font-size: 1.7rem; }
-      .hero-subtitle { font-size: 1rem; }
-      .hero-desc { font-size: 0.9rem; }
-      .btn-primary { font-size: 1rem; padding: 0.75rem 2rem; }
-      .section { padding: 1.5rem 0; }
-      .section-title { font-size: 1.2rem; }
-      .feature-grid { grid-template-columns: 1fr; gap: 0.8rem; }
-      .feature-card { padding: 1.2rem; }
-      .feature-icon { font-size: 1.7rem; }
-      .feature-name { font-size: 1rem; }
-      .feature-desc { font-size: 0.82rem; }
-      .scoring-flow { flex-direction: column; gap: 0.4rem; padding: 1.2rem; }
-      .flow-arrow { transform: rotate(90deg); }
-      .flow-step { width: 100%; font-size: 0.8rem; }
-      .ai-standard { padding: 1.2rem; }
-      .ai-standard-step { font-size: 0.82rem; }
-      .tech-tag { font-size: 0.75rem; padding: 0.25rem 0.7rem; }
-      .footer-cta { padding: 1.5rem; }
-      .footer-cta-title { font-size: 1.2rem; }
-      .footer-cta-desc { font-size: 0.82rem; }
-    }
-
-    @media (max-width: 480px) {
-      .hero-title { font-size: 1.45rem; }
-      .hero-badge { font-size: 0.72rem; }
-    }
+    .av-ds{background:#6366F1}.av-ki{background:#8B5CF6}.av-wx{background:#10B981}.av-ty{background:#F59E0B}.av-db{background:#EC4899}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:var(--font-stack);font-size:15px;line-height:1.75;color:var(--text-primary);background:linear-gradient(160deg,#F0F4FF 0%,#F5F3FF 35%,#FAF5FF 70%,#FFF5FA 100%);background-attachment:fixed;min-height:100vh;-webkit-font-smoothing:antialiased}
+    .container{max-width:800px;margin:0 auto;padding:2rem 1.5rem}
+    .topbar{position:sticky;top:0;z-index:50;background:rgba(255,255,255,0.65);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(0,0,0,0.06);box-shadow:var(--shadow-header)}
+    .topbar-inner{display:flex;align-items:center;justify-content:space-between;max-width:800px;margin:0 auto;padding:0 1.5rem;height:56px}
+    .topbar-left{display:flex;align-items:center;gap:10px}
+    .topbar-logo{font-size:22px;line-height:1}
+    .topbar-title{font-size:18px;font-weight:700;color:var(--text-primary)}
+    .topbar-badge{display:inline-flex;align-items:center;padding:2px 10px;font-size:11px;font-weight:700;color:#92400E;background:#FEF3C7;border:1px solid #FCD34D;border-radius:var(--radius-tag)}
+    .hero{text-align:center;padding:3rem 0 2.5rem}
+    .hero-badge{display:inline-flex;align-items:center;gap:0.4rem;background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius-tag);padding:0.35rem 1rem;font-size:0.8rem;color:var(--text-secondary);margin-bottom:1.2rem;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+    .hero-title{font-size:2.4rem;font-weight:800;color:var(--text-primary);margin-bottom:0.4rem;letter-spacing:-0.5px}
+    .hero-subtitle{font-size:1.1rem;color:var(--text-secondary);font-weight:500;margin-bottom:1rem}
+    .hero-avatars{display:flex;justify-content:center;gap:0.5rem;margin-bottom:1.8rem}
+    .hero-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff}
+    .hero-desc{font-size:1rem;color:var(--text-secondary);max-width:600px;margin:0 auto 1.8rem;line-height:1.75}
+    .btn-primary{display:inline-flex;align-items:center;gap:0.5rem;background:var(--primary);color:#fff;padding:0.85rem 2.2rem;border-radius:var(--radius-btn);font-size:1.05rem;font-weight:600;text-decoration:none;box-shadow:var(--shadow-btn);transition:all 0.2s ease;border:none;cursor:pointer}
+    .btn-primary:hover{background:var(--primary-dark);transform:translateY(-1px)}
+    .section{padding:2rem 0}
+    .section-title{font-size:1.4rem;font-weight:700;margin-bottom:1.2rem;color:var(--text-primary)}
+    .feature-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem}
+    .feature-card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius-card);padding:1.4rem;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);transition:all 0.25s ease;box-shadow:var(--shadow-card)}
+    .feature-card:hover{box-shadow:var(--shadow-card-hover);transform:translateY(-2px)}
+    .feature-icon{font-size:2rem;margin-bottom:0.5rem}
+    .feature-name{font-size:1.05rem;font-weight:600;margin-bottom:0.4rem}
+    .feature-desc{font-size:0.88rem;color:var(--text-secondary);line-height:1.6}
+    .scoring-flow{display:flex;align-items:center;justify-content:center;gap:0.5rem;flex-wrap:wrap;padding:1.5rem;background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius-card);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:var(--shadow-card)}
+    .flow-step{text-align:center;padding:0.6rem 1rem;border-radius:var(--radius-btn);font-size:0.85rem;font-weight:500}
+    .flow-step.input{background:rgba(59,130,246,0.1);color:var(--primary)}
+    .flow-step.models{background:rgba(139,92,246,0.1);color:#8B5CF6}
+    .flow-step.judge{background:rgba(16,185,129,0.1);color:var(--success)}
+    .flow-step.result{background:rgba(245,158,11,0.1);color:var(--warning)}
+    .flow-arrow{color:var(--text-disabled);font-size:1.2rem}
+    .ai-standard{padding:1.5rem;background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius-card);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:var(--shadow-card);margin-top:1rem}
+    .ai-standard-title{font-size:1rem;font-weight:600;margin-bottom:0.8rem;display:flex;align-items:center;gap:0.4rem}
+    .ai-standard-steps{display:flex;flex-direction:column;gap:0.6rem}
+    .ai-standard-step{display:flex;align-items:flex-start;gap:0.6rem;font-size:0.88rem;color:var(--text-secondary)}
+    .step-num{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--primary);color:#fff;font-size:0.72rem;font-weight:700;flex-shrink:0;margin-top:1px}
+    .tech-stack{display:flex;flex-wrap:wrap;gap:0.5rem}
+    .tech-tag{display:inline-block;padding:0.3rem 0.9rem;background:var(--card-bg);border:1px solid #E2E8F0;border-radius:var(--radius-tag);font-size:0.82rem;color:var(--text-secondary);font-weight:500}
+    .footer-cta{text-align:center;padding:2.5rem 0;margin-top:1.5rem;background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius-card);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:var(--shadow-card)}
+    .footer-cta-title{font-size:1.5rem;font-weight:700;margin-bottom:0.5rem}
+    .footer-cta-desc{font-size:0.9rem;color:var(--text-disabled);margin-bottom:1.5rem}
+    .footer-meta{margin-top:2rem;font-size:0.75rem;color:var(--text-disabled);opacity:0.7;text-align:center}
+    @media(max-width:768px){.container{padding:1.5rem 1rem}.topbar-inner{padding:0 1rem}.hero{padding:2rem 0 1.5rem}.hero-title{font-size:1.7rem}.hero-subtitle{font-size:1rem}.hero-desc{font-size:0.9rem}.btn-primary{font-size:1rem;padding:0.75rem 2rem}.section{padding:1.5rem 0}.section-title{font-size:1.2rem}.feature-grid{grid-template-columns:1fr;gap:0.8rem}.feature-card{padding:1.2rem}.feature-icon{font-size:1.7rem}.feature-name{font-size:1rem}.feature-desc{font-size:0.82rem}.scoring-flow{flex-direction:column;gap:0.4rem;padding:1.2rem}.flow-arrow{transform:rotate(90deg)}.flow-step{width:100%;font-size:0.8rem}.ai-standard{padding:1.2rem}.ai-standard-step{font-size:0.82rem}.tech-tag{font-size:0.75rem;padding:0.25rem 0.7rem}.footer-cta{padding:1.5rem}.footer-cta-title{font-size:1.2rem}.footer-cta-desc{font-size:0.82rem}}
+    @media(max-width:480px){.hero-title{font-size:1.45rem}.hero-badge{font-size:0.72rem}}
   </style>
 </head>
 <body>
+  <nav class="topbar">
+    <div class="topbar-inner">
+      <div class="topbar-left"><span class="topbar-logo">🧪</span><span class="topbar-title">Prompt 对比实验室</span></div>
+      <span class="topbar-badge">PROJECT</span>
+    </div>
+  </nav>
   <div class="container">
-
-    <!-- ===== Hero ===== -->
     <section class="hero">
-      <div class="hero-badge">
-        <span>🧪</span>
-        <span>多模型对比 · 交叉评分 · AI商定标准</span>
-      </div>
+      <div class="hero-badge"><span>🧪</span><span>多模型对比 · 交叉评分 · AI商定标准</span></div>
       <h1 class="hero-title">Prompt 对比实验室</h1>
       <p class="hero-subtitle">Multi-LLM Comparison & Cross-Scoring</p>
-      <p class="hero-desc">
-        输入同一 Prompt，同时调用多个大模型获取回答并排对比。
-        核心实现多评委交叉评分算法——评委与被测试 AI 双向回避，
-        由 AI 自主商定评分标准，用标准差检测分歧，自动生成多维度评估体系。
-      </p>
-      <a href="./app/" class="btn-primary">
-        🚀 立即体验
-      </a>
+      <div class="hero-avatars">
+        <div class="hero-avatar av-ds">DS</div>
+        <div class="hero-avatar av-ki">KI</div>
+        <div class="hero-avatar av-wx">WX</div>
+        <div class="hero-avatar av-ty">TY</div>
+        <div class="hero-avatar av-db">DB</div>
+      </div>
+      <p class="hero-desc">输入同一 Prompt，同时调用多个大模型获取回答并排对比。核心实现多评委交叉评分算法——评委与被测试 AI 双向回避，由 AI 自主商定评分标准，用标准差检测分歧，自动生成多维度评估体系。</p>
+      <a href="./app/" class="btn-primary">🚀 立即体验</a>
     </section>
-
-    <!-- ===== Core Features ===== -->
     <section class="section">
       <h2 class="section-title">✦ 核心功能</h2>
       <div class="feature-grid">
-        <div class="feature-card">
-          <div class="feature-icon">🔗</div>
-          <div class="feature-name">多模型并排对比</div>
-          <div class="feature-desc">同一 Prompt 同时发送给多个大模型（DeepSeek、Kimi、通义千问等），回答并排展示，直观对比差异</div>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">⚖️</div>
-          <div class="feature-name">交叉评分算法</div>
-          <div class="feature-desc">每个 AI 既当选手又当评委，但评委不给自己打分（双向回避），确保评分客观公正</div>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">🤝</div>
-          <div class="feature-name">AI 商定评分标准</div>
-          <div class="feature-desc">由多个 AI 自主协商生成评分维度与权重，无需人工预设，自动形成多维度评估体系</div>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">📊</div>
-          <div class="feature-name">标准差分歧检测</div>
-          <div class="feature-desc">通过评分标准差识别评委分歧较大的回答，高亮标记共识点与争议点</div>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">🎨</div>
-          <div class="feature-name">毛玻璃可视化</div>
-          <div class="feature-desc">采用 Glassmorphism 设计风格，毛玻璃卡片+渐变背景，视觉体验流畅</div>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">📋</div>
-          <div class="feature-name">差异分析报告</div>
-          <div class="feature-desc">自动生成对比报告：共识区域、分歧区域、各模型独特观点，一目了然</div>
-        </div>
+        <div class="feature-card"><div class="feature-icon">🔗</div><div class="feature-name">多模型并排对比</div><div class="feature-desc">同一 Prompt 同时发送给多个大模型（DeepSeek、Kimi、通义千问等），回答并排展示，直观对比差异</div></div>
+        <div class="feature-card"><div class="feature-icon">⚖️</div><div class="feature-name">交叉评分算法</div><div class="feature-desc">每个 AI 既当选手又当评委，但评委不给自己打分（双向回避），确保评分客观公正</div></div>
+        <div class="feature-card"><div class="feature-icon">🤝</div><div class="feature-name">AI 商定评分标准</div><div class="feature-desc">由多个 AI 自主协商生成评分维度与权重，无需人工预设，自动形成多维度评估体系</div></div>
+        <div class="feature-card"><div class="feature-icon">📊</div><div class="feature-name">标准差分歧检测</div><div class="feature-desc">通过评分标准差识别评委分歧较大的回答，高亮标记共识点与争议点</div></div>
+        <div class="feature-card"><div class="feature-icon">🎨</div><div class="feature-name">毛玻璃可视化</div><div class="feature-desc">采用 Glassmorphism 设计风格，毛玻璃卡片+渐变背景，视觉体验流畅</div></div>
+        <div class="feature-card"><div class="feature-icon">📋</div><div class="feature-name">差异分析报告</div><div class="feature-desc">自动生成对比报告：共识区域、分歧区域、各模型独特观点，一目了然</div></div>
       </div>
     </section>
-
-    <!-- ===== Scoring Flow ===== -->
     <section class="section">
       <h2 class="section-title">✦ 评分流程</h2>
       <div class="scoring-flow">
-        <div class="flow-step input">📝 输入 Prompt</div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-step models">🤖 多模型回答</div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-step judge">⚖️ 交叉评分</div>
-        <div class="flow-arrow">→</div>
+        <div class="flow-step input">📝 输入 Prompt</div><div class="flow-arrow">→</div>
+        <div class="flow-step models">🤖 多模型回答</div><div class="flow-arrow">→</div>
+        <div class="flow-step judge">⚖️ 交叉评分</div><div class="flow-arrow">→</div>
         <div class="flow-step result">📊 分析报告</div>
       </div>
     </section>
-
-    <!-- ===== AI Standard ===== -->
     <section class="section">
       <h2 class="section-title">✦ AI 商定评分标准</h2>
       <div class="ai-standard">
         <div class="ai-standard-title">🤝 AI 自主协商流程</div>
         <div class="ai-standard-steps">
-          <div class="ai-standard-step">
-            <span class="step-num">1</span>
-            <span>各 AI 模型独立分析 Prompt，提出自己认为重要的评分维度</span>
-          </div>
-          <div class="ai-standard-step">
-            <span class="step-num">2</span>
-            <span>汇总所有维度提案，由 AI 讨论合并相似项、去除冗余项</span>
-          </div>
-          <div class="ai-standard-step">
-            <span class="step-num">3</span>
-            <span>AI 协商确定各维度权重，形成统一评分标准</span>
-          </div>
-          <div class="ai-standard-step">
-            <span class="step-num">4</span>
-            <span>按商定标准对每个回答逐维度打分，评委与被评者双向回避</span>
-          </div>
-          <div class="ai-standard-step">
-            <span class="step-num">5</span>
-            <span>计算标准差检测分歧，生成最终评估报告</span>
-          </div>
+          <div class="ai-standard-step"><span class="step-num">1</span><span>各 AI 模型独立分析 Prompt，提出自己认为重要的评分维度</span></div>
+          <div class="ai-standard-step"><span class="step-num">2</span><span>汇总所有维度提案，由 AI 讨论合并相似项、去除冗余项</span></div>
+          <div class="ai-standard-step"><span class="step-num">3</span><span>AI 协商确定各维度权重，形成统一评分标准</span></div>
+          <div class="ai-standard-step"><span class="step-num">4</span><span>按商定标准对每个回答逐维度打分，评委与被评者双向回避</span></div>
+          <div class="ai-standard-step"><span class="step-num">5</span><span>计算标准差检测分歧，生成最终评估报告</span></div>
         </div>
       </div>
     </section>
-
-    <!-- ===== Tech Stack ===== -->
     <section class="section">
       <h2 class="section-title">✦ 技术栈</h2>
       <div class="tech-stack">
-        <span class="tech-tag">React</span>
-        <span class="tech-tag">TypeScript</span>
-        <span class="tech-tag">FastAPI</span>
-        <span class="tech-tag">Glassmorphism UI</span>
-        <span class="tech-tag">LLM API 集成</span>
-        <span class="tech-tag">交叉评分算法</span>
+        <span class="tech-tag">React</span><span class="tech-tag">TypeScript</span><span class="tech-tag">FastAPI</span><span class="tech-tag">Glassmorphism UI</span><span class="tech-tag">LLM API 集成</span><span class="tech-tag">交叉评分算法</span>
       </div>
     </section>
-
-    <!-- ===== Footer CTA ===== -->
     <div class="footer-cta">
       <div class="footer-cta-title">体验模拟演示</div>
       <div class="footer-cta-desc">在线 Demo 使用预设数据展示完整对比与评分流程</div>
-      <a href="./app/" class="btn-primary">
-        🚀 立即体验
-      </a>
+      <a href="./app/" class="btn-primary">🚀 立即体验</a>
     </div>
-
-    <div class="footer-meta">
-      Made by Anthea · Demo 使用预设数据，完整版支持实时 API 调用
-    </div>
-
+    <div class="footer-meta">Made by Anthea · v1.2.0</div>
   </div>
 </body>
 </html>
