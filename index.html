@@ -1,14 +1,178 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>frontend</title>
-    <script type="module" crossorigin src="/assets/index-C5RG85W3.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-optG22US.css">
-  </head>
-  <body>
-    <div id="root"></div>
-  </body>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prompt对比实验室 v1.2.0 — 项目介绍</title>
+<meta name="description" content="Prompt对比实验室 — 多AI模型回答对比与交叉评分平台">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0d1117;color:#c9d1d9;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;line-height:1.6}
+.container{max-width:900px;margin:0 auto;padding:2rem}
+.hero{text-align:center;padding:3rem 0 2rem;border-bottom:1px solid rgba(177,76,217,0.2)}
+.hero h1{font-size:2.4rem;color:#e9e0ff;margin-bottom:0.3rem}
+.hero .version{font-size:1.1rem;color:#8b949e;margin-bottom:1rem}
+.hero .tagline{font-size:1.2rem;color:#aeb7c1}
+.badge{display:inline-block;padding:0.25rem 0.75rem;border-radius:9999px;font-size:0.85rem;margin:0.3rem}
+.badge-tech{background:rgba(110,64,201,0.2);color:#e9e0ff;border:1px solid rgba(110,64,201,0.4)}
+.badge-arch{background:rgba(56,139,253,0.15);color:#79c0ff;border:1px solid rgba(56,139,253,0.3)}
+.badge-local{background:rgba(46,160,67,0.15);color:#7ee787;border:1px solid rgba(46,160,67,0.3)}
+.section{padding:2rem 0}
+.section-title{font-size:1.5rem;color:#e9e0ff;margin-bottom:1rem;display:flex;align-items:center;gap:0.5rem}
+.section-title::before{content:'◆';color:#6e40c9}
+.screenshots{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1rem 0}
+.screenshots img{width:100%;border-radius:12px;border:1px solid #3c444d;transition:transform 0.2s}
+.screenshots img:hover{transform:scale(1.02)}
+.arch-box{background:rgba(15,19,26,0.55);border:1px solid #3c444d;border-radius:12px;padding:1.5rem;margin:1rem 0}
+.arch-flow{display:flex;align-items:center;justify-content:center;gap:0.5rem;flex-wrap:wrap;padding:1rem 0}
+.arch-node{background:#1c2128;border:1px solid #3c444d;border-radius:8px;padding:0.5rem 1rem;text-align:center;font-size:0.9rem}
+.arch-node.highlight{border-color:#6e40c9;color:#e9e0ff;background:rgba(110,64,201,0.1)}
+.arch-node.backend{border-color:#56d364;color:#7ee787;background:rgba(46,160,67,0.1)}
+.arch-arrow{color:#8b949e;font-size:1.2rem}
+.features{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1rem 0}
+.feature-card{background:rgba(15,19,26,0.55);border:1px solid #3c444d;border-radius:12px;padding:1.2rem}
+.feature-card h3{color:#e9e0ff;font-size:1rem;margin-bottom:0.5rem}
+.feature-card p{color:#aeb7c1;font-size:0.9rem}
+.feature-icon{font-size:1.4rem;margin-right:0.3rem}
+.tech-stack{display:flex;gap:0.5rem;flex-wrap:wrap;margin:1rem 0}
+.tech-tag{background:#1c2128;border:1px solid #3c444d;border-radius:8px;padding:0.4rem 0.8rem;font-size:0.85rem;color:#aeb7c1}
+.tech-tag.core{border-color:#6e40c9;color:#e9e0ff}
+.tech-tag.backend{border-color:#56d364;color:#7ee787}
+.scoring-diagram{background:#1c2128;border:1px solid #3c444d;border-radius:12px;padding:1.5rem;margin:1.5rem 0;text-align:center}
+.scoring-diagram h3{color:#e9e0ff;margin-bottom:1rem}
+.scoring-row{display:flex;align-items:center;justify-content:center;gap:0.8rem;margin:0.5rem 0;flex-wrap:wrap}
+.scoring-item{padding:0.3rem 0.7rem;border-radius:6px;font-size:0.85rem}
+.scoring-ai{background:rgba(110,64,201,0.15);border:1px solid rgba(110,64,201,0.3);color:#e9e0ff}
+.scoring-judge{background:rgba(56,139,253,0.15);border:1px solid rgba(56,139,253,0.3);color:#79c0ff}
+.scoring-avoid{background:rgba(248,81,73,0.15);border:1px solid rgba(248,81,73,0.3);color:#f85149;font-style:italic}
+.note-box{background:rgba(110,64,201,0.08);border:1px solid rgba(110,64,201,0.3);border-radius:12px;padding:1.5rem;margin:1.5rem 0;text-align:center}
+.note-box h3{color:#e9e0ff;margin-bottom:0.5rem}
+.note-box p{color:#aeb7c1;font-size:0.95rem}
+.back-link{display:inline-flex;align-items:center;gap:0.5rem;color:#6e40c9;text-decoration:none;font-size:0.95rem;margin-top:1.5rem;padding:0.5rem 1rem;border:1px solid rgba(110,64,201,0.3);border-radius:8px;transition:all 0.2s}
+.back-link:hover{background:rgba(110,64,201,0.1);border-color:#6e40c9}
+@media(max-width:600px){.screenshots,.features{grid-template-columns:1fr}.hero h1{font-size:1.8rem}}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="hero">
+    <h1>Prompt对比实验室</h1>
+    <div class="version">v1.2.0</div>
+    <div class="tagline">多 AI 模型回答对比与交叉评分平台</div>
+    <div style="margin-top:1rem">
+      <span class="badge badge-tech">React</span>
+      <span class="badge badge-tech backend">FastAPI</span>
+      <span class="badge badge-arch">交叉评分</span>
+      <span class="badge badge-arch">LLM 评测</span>
+      <span class="badge badge-local">前后端分离</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">项目截图</div>
+    <div class="screenshots">
+      <img src="screenshot1.png" alt="Prompt对比实验室 — 对比界面">
+      <img src="screenshot2.png" alt="Prompt对比实验室 — 评分界面">
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">架构设计</div>
+    <div class="arch-box">
+      <div class="arch-flow">
+        <div class="arch-node">用户输入 Prompt</div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-node highlight">React 前端</div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-node backend">FastAPI 后端</div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-node highlight">多模型并行调用</div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-node">结果并排展示</div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-node highlight">交叉评分算法</div>
+      </div>
+      <div style="margin-top:1rem;color:#aeb7c1;font-size:0.9rem">
+        <p>前端使用 React + TypeScript 构建，提供直观的对比界面与评分可视化</p>
+        <p>后端使用 FastAPI，负责调度多模型 API 调用与评分计算</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">交叉评分算法</div>
+    <div class="scoring-diagram">
+      <h3>评委与测试 AI 双向回避机制</h3>
+      <div class="scoring-row">
+        <div class="scoring-ai">模型 A 回答</div>
+        <div class="scoring-item">+</div>
+        <div class="scoring-judge">评委 B 评分</div>
+        <div class="scoring-item">+</div>
+        <div class="scoring-judge">评委 C 评分</div>
+      </div>
+      <div class="scoring-row" style="color:#f85149;font-size:0.85rem;margin-top:0.3rem">
+        <div class="scoring-avoid">评委 A ✗ 不评模型 A</div>
+        <div class="scoring-avoid">模型 B ✗ 不评模型 B</div>
+      </div>
+      <div style="color:#aeb7c1;font-size:0.9rem;margin-top:1rem;text-align:left">
+        <p>✅ <strong style="color:#7ee787">双向回避</strong>：评委不得评自己所属模型，避免利益偏倚</p>
+        <p>✅ <strong style="color:#7ee787">标准差检测</strong>：用统计学方法检测评委间的评分分歧</p>
+        <p>✅ <strong style="color:#7ee787">AI 商定标准</strong>：支持 AI 自动生成评分标准，也支持人类自定义</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">核心功能</div>
+    <div class="features">
+      <div class="feature-card">
+        <h3><span class="feature-icon">🤖</span>多模型并排对比</h3>
+        <p>同一 Prompt 同时调用多个大模型，结果并排展示，一目了然</p>
+      </div>
+      <div class="feature-card">
+        <h3><span class="feature-icon">⚖️</span>交叉评分算法</h3>
+        <p>多评委交叉评分，评委与被测 AI 双向回避，保证评分公平性</p>
+      </div>
+      <div class="feature-card">
+        <h3><span class="feature-icon">📊</span>标准差检测</p>
+        <p>用统计学标准差检测评委间的评分分歧，标记有争议的回答</p>
+      </div>
+      <div class="feature-card">
+        <h3><span class="feature-icon">📝</span>自定义评分标准</h3>
+        <p>支持 AI 商定评分标准和人类自定义评分标准双模式</p>
+      </div>
+      <div class="feature-card">
+        <h3><span class="feature-icon">🌐</span>网页抓取增强</h3>
+        <p>支持输入参考网页 URL，AI 结合网页内容回答，增强对比深度</p>
+      </div>
+      <div class="feature-card">
+        <h3><span class="feature-icon">📈</span>可视化图表</h3>
+        <p>评分结果通过 Recharts 图表直观展示，支持水平/垂直布局</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">技术栈</div>
+    <div class="tech-stack">
+      <span class="tech-tag core">React</span>
+      <span class="tech-tag core">TypeScript</span>
+      <span class="tech-tag backend">FastAPI</span>
+      <span class="tech-tag backend">Python</span>
+      <span class="tech-tag">Redux Toolkit</span>
+      <span class="tech-tag">Recharts</span>
+      <span class="tech-tag">Tailwind CSS</span>
+    </div>
+  </div>
+
+  <div class="note-box">
+    <h3>💡 关于在线演示</h3>
+    <p>Prompt对比实验室是 <strong>前后端分离架构</strong>，需要后端 API 服务运行，无法提供在线演示。<br>
+    但您可以从截图和架构介绍中了解项目的完整设计与技术细节。<br>
+    源码和详细文档可在 GitHub 仓库查看。</p>
+  </div>
+
+  <a href="https://anthea-sereinan.github.io/Anthea-Tech/" class="back-link">← 返回个人网站</a>
+</div>
+</body>
 </html>
