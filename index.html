@@ -1,1068 +1,451 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Prompt 对比实验室 — Demo</title>
-<style>
-/* ===== CSS Custom Properties ===== */
-:root {
-  --primary: #3B82F6;
-  --primary-light: #EFF6FF;
-  --primary-dark: #2563EB;
-  --success: #10B981;
-  --warning: #F59E0B;
-  --danger: #EF4444;
-  --text-primary: #1E293B;
-  --text-secondary: #64748B;
-  --text-disabled: #94A3B8;
-  --card-bg: rgba(255,255,255,0.55);
-  --card-border: rgba(255,255,255,0.6);
-  --input-bg: rgba(255,255,255,0.7);
-  --diff-consensus: #ECFDF5;
-  --diff-divergent: #FFFBEB;
-  --diff-unique: #EFF6FF;
-  --radius-card: 20px;
-  --radius-input: 12px;
-  --radius-btn: 12px;
-  --radius-tag: 999px;
-  --shadow-card: 0 4px 24px rgba(0,0,0,0.03);
-  --shadow-card-hover: 0 8px 32px rgba(0,0,0,0.06);
-  --shadow-header: 0 1px 3px rgba(0,0,0,0.04);
-  --shadow-btn: 0 2px 8px rgba(59,130,246,0.2);
-  --font-stack: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Noto Sans SC", "Microsoft YaHei", "Helvetica Neue", sans-serif;
-  --content-max: 1200px;
-  --input-max: 800px;
-}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prompt对比实验室 — 项目介绍</title>
+  <style>
+    :root {
+      --bg-page: #FAFBFC;
+      --bg-gradient: linear-gradient(160deg, #F0F4FF 0%, #F5F3FF 35%, #FAF5FF 70%, #FFF5FA 100%);
+      --bg-card: rgba(255,255,255,0.55);
+      --bg-card-hover: rgba(255,255,255,0.75);
+      --border: rgba(255,255,255,0.6);
+      --text-primary: #1E293B;
+      --text-secondary: #64748B;
+      --text-muted: #94A3B8;
+      --accent: #3B82F6;
+      --accent-2: #8B5CF6;
+      --accent-gradient: linear-gradient(135deg, #3B82F6, #8B5CF6);
+      --font-sans: 'Inter', -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    }
 
-/* model avatar colors */
-.av-ds{background:#6366F1}.av-ki{background:#8B5CF6}.av-wx{background:#10B981}.av-ty{background:#F59E0B}.av-db{background:#EC4899}
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* ===== Reset ===== */
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{
-  font-family:var(--font-stack);
-  font-size:14px;line-height:1.75;color:var(--text-primary);
-  background:linear-gradient(160deg,#F0F4FF 0%,#F5F3FF 35%,#FAF5FF 70%,#FFF5FA 100%);
-  background-attachment:fixed;min-height:100vh;-webkit-font-smoothing:antialiased;
-}
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg-gradient);
+      background-attachment: fixed;
+      color: var(--text-primary);
+      line-height: 1.7;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
 
-/* ===== Glass ===== */
-.glass-card{
-  background:var(--card-bg);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
-  border:1px solid var(--card-border);border-radius:var(--radius-card);box-shadow:var(--shadow-card);
-}
-.glass-input{
-  background:var(--input-bg);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-  border:1px solid #CBD5E1;border-radius:var(--radius-input);transition:border-color .2s,box-shadow .2s;
-}
-.glass-input:focus{outline:none;border-color:#818CF8;box-shadow:0 0 0 3px rgba(129,140,248,0.15)}
-.glass-input:read-only{cursor:default;background:rgba(255,255,255,0.5);border-style:dashed}
-.glass-input:read-only:focus{border-color:#CBD5E1;box-shadow:none}
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
 
-/* ===== Layout ===== */
-.page{max-width:var(--content-max);margin:0 auto;padding:0 24px}
-.header-wrap{
-  position:sticky;top:0;z-index:50;background:rgba(255,255,255,0.65);
-  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-  border-bottom:1px solid rgba(0,0,0,0.06);box-shadow:var(--shadow-header);
-}
-.header{display:flex;align-items:center;justify-content:space-between;max-width:var(--content-max);margin:0 auto;padding:0 24px;height:56px}
-.header-left{display:flex;align-items:center;gap:10px}
-.header-logo{font-size:22px;line-height:1}
-.header-title{font-size:18px;font-weight:700;color:var(--text-primary);white-space:nowrap}
-.demo-badge{display:inline-flex;align-items:center;padding:2px 10px;font-size:11px;font-weight:700;color:#92400E;background:#FEF3C7;border:1px solid #FCD34D;border-radius:999px;white-space:nowrap}
+    /* ===== Hero ===== */
+    .hero {
+      text-align: center;
+      padding: 3rem 0 2.5rem;
+    }
 
-.btn-ghost{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;font-size:13px;font-weight:500;color:var(--text-secondary);background:none;border:1px solid #E2E8F0;border-radius:var(--radius-btn);cursor:pointer;transition:all .2s;font-family:inherit}
-.btn-ghost:hover{background:#F8FAFC;color:var(--text-primary)}
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 0.35rem 1rem;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      margin-bottom: 1.2rem;
+      backdrop-filter: blur(12px);
+    }
 
-/* Demo Notice */
-.demo-notice{display:flex;align-items:center;justify-content:center;gap:8px;padding:8px 16px;background:linear-gradient(135deg,#FEF3C7,#FDE68A);border-bottom:1px solid #FCD34D;font-size:13px;font-weight:600;color:#92400E;text-align:center;flex-wrap:wrap}
-.demo-notice-icon{font-size:16px}
+    .hero-title {
+      font-size: 2.4rem;
+      font-weight: 800;
+      background: var(--accent-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.4rem;
+    }
 
-/* ===== Sections ===== */
-.section{padding-top:28px}
-.section-input{max-width:var(--input-max);margin:0 auto}
-.textarea-wrap{position:relative}
-.prompt-textarea{width:100%;min-height:96px;max-height:288px;padding:14px 16px;resize:none;font-family:inherit;font-size:14px;line-height:1.75;color:var(--text-primary)}
-.char-count{position:absolute;bottom:8px;right:12px;font-size:12px;color:var(--text-secondary)}
-.char-count.warn{color:var(--warning)}
-.char-warn-msg{display:none;font-size:12px;color:var(--warning);margin-top:4px;text-align:right}
-.char-warn-msg.show{display:block}
+    .hero-subtitle {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
 
-/* Presets */
-.preset-wrap{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
-.preset-tag{display:inline-flex;align-items:center;height:32px;padding:0 14px;font-size:13px;font-weight:500;color:#475569;background:#F1F5F9;border:1px solid transparent;border-radius:var(--radius-tag);cursor:pointer;transition:all .2s;font-family:inherit;white-space:nowrap}
-.preset-tag:hover{background:#E2E8F0}
-.preset-tag.selected{color:var(--primary);background:var(--primary-light);border-color:var(--primary)}
+    .hero-desc {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin: 0 auto 1.8rem;
+      line-height: 1.75;
+    }
 
-/* Button */
-.btn-wrap{display:flex;justify-content:center;margin-top:20px}
-.btn-compare{display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 32px;font-size:15px;font-weight:600;color:#fff;background:var(--primary);border:none;border-radius:var(--radius-btn);cursor:pointer;box-shadow:var(--shadow-btn);transition:all .2s;font-family:inherit}
-.btn-compare:hover:not(:disabled){background:var(--primary-dark)}
-.btn-compare:disabled{background:#CBD5E1;color:var(--text-disabled);cursor:not-allowed;box-shadow:none}
-.btn-compare .spinner{display:none;width:18px;height:18px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
-.btn-compare.loading .spinner{display:inline-block}
-.btn-compare.loading .btn-icon{display:none}
-@keyframes spin{to{transform:rotate(360deg)}}
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--accent-gradient);
+      color: #fff;
+      padding: 0.85rem 2.2rem;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      font-weight: 600;
+      text-decoration: none;
+      box-shadow: 0 4px 16px rgba(59,130,246,0.3);
+      transition: all 0.25s ease;
+      border: none;
+      cursor: pointer;
+    }
 
-/* Status */
-.status-banner{display:none;max-width:var(--content-max);margin:16px auto 0;padding:12px 20px;border-radius:var(--radius-input);font-size:14px;font-weight:500}
-.status-banner.show{display:block}
-.status-banner.info{background:#EFF6FF;color:var(--primary);border:1px solid #BFDBFE}
-.status-banner.ok{background:#ECFDF5;color:var(--success);border:1px solid #A7F3D0}
-.status-banner.warn{background:#FFFBEB;color:#B45309;border:1px solid #FDE68A}
-.status-banner.phase{background:#F5F3FF;color:#6D28D9;border:1px solid #DDD6FE}
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(59,130,246,0.4);
+    }
 
-/* Dimensions Panel */
-.dims-panel{display:none;max-width:var(--content-max);margin:16px auto 0}
-.dims-panel.show{display:block}
-.dims-card{padding:20px 24px}
-.dims-title{font-size:15px;font-weight:600;color:var(--text-primary);margin-bottom:4px}
-.dims-subtitle{font-size:12px;color:var(--text-secondary);margin-bottom:14px}
-.dims-list{display:flex;flex-wrap:wrap;gap:10px}
-.dim-tag{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:var(--radius-tag);font-size:13px;font-weight:500;background:#fff;border:1px solid #E2E8F0;transition:transform .2s}
-.dim-tag:hover{transform:translateY(-1px)}
-.dim-tag-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0}
-.dim-tag-name{color:var(--text-primary)}
-.dim-tag-def{font-size:11px;color:var(--text-secondary);font-weight:400;margin-left:2px}
+    /* ===== Section ===== */
+    .section {
+      padding: 2rem 0;
+    }
 
-/* Toolbar */
-.toolbar{display:none;align-items:center;justify-content:space-between;max-width:var(--content-max);margin:20px auto 0;padding:0 4px}
-.toolbar.show{display:flex}
-.toolbar-left{display:flex;align-items:center;gap:10px}
-.toolbar-label{font-size:13px;color:var(--text-secondary)}
-.toggle-wrap{display:flex;align-items:center;gap:8px;cursor:pointer}
-.toggle-track{width:40px;height:22px;border-radius:11px;background:#CBD5E1;position:relative;transition:background .2s}
-.toggle-track.on{background:var(--primary)}
-.toggle-knob{position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,0.15);transition:transform .2s}
-.toggle-track.on .toggle-knob{transform:translateX(18px)}
-.btn-export{display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 16px;font-size:13px;font-weight:500;color:var(--text-primary);background:var(--card-bg);border:1px solid #E2E8F0;border-radius:var(--radius-btn);cursor:pointer;transition:all .2s;font-family:inherit}
-.btn-export:hover{background:#fff;box-shadow:var(--shadow-card-hover)}
-.btn-export:disabled{color:var(--text-disabled);cursor:not-allowed}
+    .section-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 1.2rem;
+      color: var(--text-primary);
+    }
 
-/* ===== Chart ===== */
-.chart-area{display:none;margin-top:24px}
-.chart-area.show{display:block}
-.chart-card{padding:24px 28px 20px;overflow-x:auto}
-.chart-title{font-size:16px;font-weight:600;margin-bottom:8px;color:var(--text-primary)}
-.chart-legend{display:flex;flex-wrap:wrap;gap:16px;margin-bottom:18px;font-size:12px;color:var(--text-secondary)}
-.chart-legend span{display:flex;align-items:center;gap:5px}
-.chart-legend-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
-.chart-outer{min-width:520px}
-.chart-container{display:flex;align-items:flex-end;height:200px;position:relative;padding-left:36px;padding-bottom:28px}
-.chart-y-axis{position:absolute;left:0;top:0;bottom:28px;display:flex;flex-direction:column-reverse;justify-content:space-between;font-size:11px;color:var(--text-secondary);text-align:right;width:30px}
-.chart-grid{position:absolute;left:36px;right:0;top:0;bottom:28px;display:flex;flex-direction:column-reverse;justify-content:space-between;pointer-events:none}
-.chart-grid-line{width:100%;border-top:1px dashed #E2E8F0}
-.chart-bars{display:flex;justify-content:space-around;align-items:flex-end;flex:1;position:relative;z-index:1;padding:0 2px}
-.chart-model-group{display:flex;align-items:flex-end;gap:3px;flex-direction:row;height:100%;flex-shrink:0}
-.chart-bar-wrap{display:flex;flex-direction:column;align-items:center;width:16px;height:100%;justify-content:flex-end}
-.chart-bar{width:100%;border-radius:3px 3px 0 0;transition:height .6s cubic-bezier(.34,1.56,.64,1);cursor:pointer;min-height:0}
-.chart-bar:hover{filter:brightness(0.85)}
-.chart-bar::after{content:attr(data-tip);position:absolute;top:-22px;left:50%;transform:translateX(-50%);font-size:10px;font-weight:600;color:var(--text-primary);opacity:0;transition:opacity .15s;white-space:nowrap;pointer-events:none}
-.chart-bar:hover::after{opacity:1}
-.chart-x-labels{display:flex;justify-content:space-around;padding-left:36px;margin-top:6px}
-.chart-x-label{font-size:11px;font-weight:500;color:var(--text-secondary);text-align:center;white-space:nowrap}
+    /* ===== Feature Grid ===== */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
 
-/* ===== Cards ===== */
-.cards-area{display:none;margin-top:24px}
-.cards-area.show{display:block}
-.cards-grid{display:grid;gap:16px;grid-template-columns:repeat(5,1fr)}
-.model-card{padding:20px;transition:box-shadow .3s,transform .2s;overflow:hidden;display:flex;flex-direction:column;height:100%}
-.model-card:hover{box-shadow:var(--shadow-card-hover);transform:translateY(-2px)}
-.card-header{display:flex;align-items:center;gap:10px;margin-bottom:14px;height:34px;flex-shrink:0}
-.card-avatar{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff;flex-shrink:0}
-.card-name{font-size:15px;font-weight:600;color:var(--text-primary)}
-.card-time{font-size:12px;color:var(--text-secondary);margin-left:auto}
-.card-status{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:500}
-.status-dot{width:6px;height:6px;border-radius:50%}
-.status-dot.ok{background:var(--success)}.status-dot.err{background:var(--danger)}
-.card-answer{font-size:14px;line-height:1.8;color:var(--text-primary);height:320px;overflow-y:auto;flex-shrink:0}
-.card-answer h3{font-size:15px;font-weight:600;margin:12px 0 6px}
-.card-answer p{margin-bottom:6px}
-.card-answer ul,.card-answer ol{padding-left:20px;margin:6px 0}
-.card-answer li{margin-bottom:3px}
-.card-answer strong{font-weight:600}
-.card-answer.collapsed{overflow:hidden;position:relative}
-.card-answer.collapsed::after{content:'';position:absolute;bottom:0;left:0;right:0;height:60px;background:linear-gradient(transparent,rgba(255,255,255,0.9))}
-.card-answer::-webkit-scrollbar{width:5px}
-.card-answer::-webkit-scrollbar-track{background:transparent}
-.card-answer::-webkit-scrollbar-thumb{background:#CBD5E1;border-radius:999px}
-.card-answer::-webkit-scrollbar-thumb:hover{background:#94A3B8}
-.expand-btn{display:block;width:100%;height:36px;padding:8px;margin-top:4px;font-size:13px;color:var(--primary);background:none;border:none;cursor:pointer;font-family:inherit;flex-shrink:0}
-.expand-btn:hover{color:var(--primary-dark)}
+    .feature-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.4rem;
+      backdrop-filter: blur(12px);
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.03);
+    }
 
-/* Score */
-.card-score{padding-top:14px;border-top:1px solid #F1F5F9}
-.score-judges{font-size:12px;color:var(--text-secondary);margin-bottom:10px;height:36px;line-height:1.5}
-.score-dim-row{display:flex;align-items:center;justify-content:space-between;padding:6px 0;cursor:pointer;border-radius:6px;transition:background .15s}
-.score-dim-row:hover{background:rgba(0,0,0,0.02)}
-.score-dim-left{display:flex;align-items:center;gap:8px;font-size:13px}
-.score-dim-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
-.score-dim-bar-wrap{flex:1;max-width:100px;height:6px;background:#F1F5F9;border-radius:3px;overflow:hidden;margin:0 10px}
-.score-dim-bar{height:100%;border-radius:3px;transition:width .6s ease}
-.score-dim-val{font-size:13px;font-weight:600;color:var(--text-primary);min-width:36px;text-align:right}
-.score-warn{font-size:11px;color:var(--warning);margin-left:4px}
-.score-total{display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding-top:10px;border-top:1px solid #F1F5F9;font-size:14px;font-weight:700}
-.score-total-val{font-size:18px;color:var(--primary)}
-.group-score-row{display:flex;align-items:center;justify-content:space-between;padding:4px 0;font-size:13px;color:var(--text-secondary);margin-top:6px;padding-top:6px;border-top:1px dashed #E2E8F0}
-.group-score-val{font-weight:600;color:var(--text-primary)}
+    .feature-card:hover {
+      background: var(--bg-card-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.06);
+    }
 
-/* Score Detail */
-.score-detail{display:none;margin-top:8px;padding:12px;background:rgba(248,250,252,0.7);border-radius:10px;font-size:13px}
-.score-detail.show{display:block}
-.score-detail h4{font-size:13px;font-weight:600;margin:8px 0 4px}
-.score-detail-judge{display:flex;align-items:center;gap:6px;margin-bottom:3px}
-.score-detail-judge-name{font-weight:600;font-size:12px}
-.score-detail-reason{font-size:12px;color:var(--text-secondary);margin-left:20px;margin-bottom:8px;line-height:1.6}
+    .feature-icon {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
 
-/* Skeleton */
-@keyframes shimmer{0%{background-position:-400px 0}100%{background-position:400px 0}}
-.skeleton-card{padding:20px;border-radius:var(--radius-card);background:var(--card-bg);border:1px solid var(--card-border);min-height:300px}
-.skeleton-line{height:14px;border-radius:7px;margin-bottom:12px;background:linear-gradient(90deg,#E2E8F0 25%,#F1F5F9 50%,#E2E8F0 75%);background-size:800px 100%;animation:shimmer 1.5s infinite}
-.skeleton-line.w60{width:60%}.skeleton-line.w80{width:80%}.skeleton-line.w40{width:40%}.skeleton-line.w100{width:100%}
-.skeleton-avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(90deg,#E2E8F0 25%,#F1F5F9 50%,#E2E8F0 75%);background-size:800px 100%;animation:shimmer 1.5s infinite}
+    .feature-name {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+    }
 
-/* Diff */
-.diff-consensus{background:var(--diff-consensus);padding:2px 0;border-radius:2px}
-.diff-divergent{background:var(--diff-divergent);padding:2px 0;border-radius:2px}
-.diff-unique{background:var(--diff-unique);padding:2px 0;border-radius:2px}
+    .feature-desc {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
 
-/* History */
-.history-area{margin-top:40px;padding-bottom:40px}
-.history-card{padding:20px 24px}
-.history-header{display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none}
-.history-title{font-size:16px;font-weight:600}
-.history-actions{display:flex;gap:8px}
-.btn-sm{padding:4px 12px;font-size:12px;font-weight:500;color:var(--text-secondary);background:none;border:1px solid #E2E8F0;border-radius:6px;cursor:pointer;transition:all .2s;font-family:inherit}
-.btn-sm:hover{background:#F8FAFC;color:var(--text-primary)}
-.btn-sm.danger:hover{color:var(--danger);border-color:var(--danger);background:#FEF2F2}
-.history-list{display:none;margin-top:14px}
-.history-list.show{display:block}
-.history-item{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-radius:10px;cursor:pointer;transition:background .15s;border:1px solid transparent}
-.history-item:hover{background:rgba(248,250,252,0.8);border-color:#E2E8F0}
-.history-item-left{display:flex;align-items:center;gap:12px;flex:1;min-width:0}
-.history-date{font-size:12px;color:var(--text-secondary);white-space:nowrap}
-.history-prompt{font-size:13px;color:var(--text-primary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
-.history-arrow{font-size:14px;color:var(--text-secondary);flex-shrink:0}
-.history-empty{text-align:center;padding:24px;font-size:13px;color:var(--text-disabled)}
+    /* ===== Scoring Flow ===== */
+    .scoring-flow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      padding: 1.5rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      backdrop-filter: blur(12px);
+    }
 
-/* ===== Responsive ===== */
-@media (max-width:1199px){
-  .cards-grid{grid-template-columns:repeat(3,1fr)}
-  .chart-bar-wrap{width:14px}
-}
-@media (max-width:767px){
-  .cards-grid{grid-template-columns:repeat(2,1fr)}
-}
-@media (max-width:639px){
-  .header-title{display:none}
-  .header{padding:0 12px}
-  .page{padding:0 12px}
-  .cards-grid{grid-template-columns:1fr}
-  .btn-compare{width:100%;justify-content:center}
-  .chart-bar-wrap{width:12px}
-  .chart-container{height:160px}
-  .chart-legend{gap:10px;font-size:11px}
-  .chart-outer{min-width:420px}
-  .card-answer{height:260px}
-  .preset-wrap{flex-wrap:nowrap;overflow-x:auto;padding-bottom:6px;-webkit-overflow-scrolling:touch}
-  .preset-tag{flex-shrink:0}
-  .toolbar{flex-direction:column;gap:10px;align-items:flex-start}
-  .dims-list{flex-direction:column}
-  .history-item-left{flex-wrap:wrap;gap:6px}
-  .history-prompt{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-}
+    .flow-step {
+      text-align: center;
+      padding: 0.6rem 1rem;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
 
-/* Toast */
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);padding:10px 24px;border-radius:999px;font-size:13px;font-weight:500;color:#fff;background:var(--text-primary);z-index:999;opacity:0;transition:opacity .3s;pointer-events:none}
-.toast.show{opacity:1}
-</style>
+    .flow-step.input { background: rgba(59,130,246,0.1); color: var(--accent); }
+    .flow-step.models { background: rgba(139,92,246,0.1); color: var(--accent-2); }
+    .flow-step.judge { background: rgba(16,185,129,0.1); color: #10B981; }
+    .flow-step.result { background: rgba(245,158,11,0.1); color: #F59E0B; }
+
+    .flow-arrow {
+      color: var(--text-muted);
+      font-size: 1.2rem;
+    }
+
+    /* ===== AI Standard ===== */
+    .ai-standard {
+      padding: 1.5rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      backdrop-filter: blur(12px);
+      margin-top: 1rem;
+    }
+
+    .ai-standard-title {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .ai-standard-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .ai-standard-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+    }
+
+    .step-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--accent-gradient);
+      color: #fff;
+      font-size: 0.72rem;
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* ===== Tech Stack ===== */
+    .tech-stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .tech-tag {
+      display: inline-block;
+      padding: 0.3rem 0.9rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    /* ===== Footer CTA ===== */
+    .footer-cta {
+      text-align: center;
+      padding: 2.5rem 0;
+      margin-top: 1.5rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      backdrop-filter: blur(12px);
+    }
+
+    .footer-cta-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-cta-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+    }
+
+    .footer-meta {
+      margin-top: 2rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      opacity: 0.7;
+      text-align: center;
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 768px) {
+      .container { padding: 1.5rem 1rem; }
+      .hero { padding: 2rem 0 1.5rem; }
+      .hero-title { font-size: 1.7rem; }
+      .hero-subtitle { font-size: 1rem; }
+      .hero-desc { font-size: 0.9rem; }
+      .btn-primary { font-size: 1rem; padding: 0.75rem 2rem; }
+      .section { padding: 1.5rem 0; }
+      .section-title { font-size: 1.2rem; }
+      .feature-grid { grid-template-columns: 1fr; gap: 0.8rem; }
+      .feature-card { padding: 1.2rem; }
+      .feature-icon { font-size: 1.7rem; }
+      .feature-name { font-size: 1rem; }
+      .feature-desc { font-size: 0.82rem; }
+      .scoring-flow { flex-direction: column; gap: 0.4rem; padding: 1.2rem; }
+      .flow-arrow { transform: rotate(90deg); }
+      .flow-step { width: 100%; font-size: 0.8rem; }
+      .ai-standard { padding: 1.2rem; }
+      .ai-standard-step { font-size: 0.82rem; }
+      .tech-tag { font-size: 0.75rem; padding: 0.25rem 0.7rem; }
+      .footer-cta { padding: 1.5rem; }
+      .footer-cta-title { font-size: 1.2rem; }
+      .footer-cta-desc { font-size: 0.82rem; }
+    }
+
+    @media (max-width: 480px) {
+      .hero-title { font-size: 1.45rem; }
+      .hero-badge { font-size: 0.72rem; }
+    }
+  </style>
 </head>
 <body>
+  <div class="container">
 
-<!-- HEADER -->
-<div class="header-wrap">
-  <div class="header">
-    <div class="header-left">
-      <span class="header-logo">📊</span>
-      <span class="header-title">Prompt 对比实验室</span>
-      <span class="demo-badge">⛔ 演示版</span>
-    </div>
-    <div class="header-right">
-      <button class="btn-ghost" onclick="scrollToHistory()">📋 历史记录</button>
-    </div>
-  </div>
-</div>
-
-<!-- DEMO NOTICE -->
-<div class="demo-notice">
-  <span class="demo-notice-icon">⚠️</span>
-  本页面为纯前端演示，所有模型回答与评分均为手写模拟数据，并非真实 AI 调用结果，仅供效果展示
-</div>
-
-<!-- PAGE -->
-<div class="page">
-
-  <!-- Input -->
-  <div class="section section-input">
-    <div class="textarea-wrap">
-      <textarea class="prompt-textarea glass-input" id="promptInput"
-        placeholder="⬆️ 演示页面 — 请点击下方预设模板切换问题"
-        oninput="onPromptInput()" readonly></textarea>
-      <span class="char-count" id="charCount">0 字</span>
-    </div>
-    <div class="char-warn-msg" id="charWarn">问题较长，调用耗时可能增加</div>
-    <div class="preset-wrap" id="presetTags"></div>
-    <div class="btn-wrap">
-      <button class="btn-compare" id="compareBtn" disabled onclick="startCompare()">
-        <span class="btn-icon">🚀</span> 开始对比
-        <span class="spinner"></span>
-      </button>
-    </div>
-  </div>
-
-  <!-- Status -->
-  <div class="status-banner" id="statusBanner"></div>
-
-  <!-- Negotiated Dimensions -->
-  <div class="dims-panel" id="dimsPanel">
-    <div class="dims-card glass-card">
-      <div class="dims-title">📐 AI 商定评分标准</div>
-      <div class="dims-subtitle" id="dimsSubtitle"></div>
-      <div class="dims-list" id="dimsList"></div>
-    </div>
-  </div>
-
-  <!-- Toolbar -->
-  <div class="toolbar" id="toolbar">
-    <div class="toolbar-left">
-      <div class="toggle-wrap" onclick="toggleDiff()">
-        <div class="toggle-track" id="diffTrack"><div class="toggle-knob"></div></div>
-        <span class="toolbar-label">差异高亮</span>
+    <!-- ===== Hero ===== -->
+    <section class="hero">
+      <div class="hero-badge">
+        <span>🧪</span>
+        <span>多模型对比 · 交叉评分 · AI商定标准</span>
       </div>
-    </div>
-    <button class="btn-export" id="exportBtn" disabled onclick="exportReport()">📥 导出报告</button>
-  </div>
+      <h1 class="hero-title">Prompt 对比实验室</h1>
+      <p class="hero-subtitle">Multi-LLM Comparison & Cross-Scoring</p>
+      <p class="hero-desc">
+        输入同一 Prompt，同时调用多个大模型获取回答并排对比。
+        核心实现多评委交叉评分算法——评委与被测试 AI 双向回避，
+        由 AI 自主商定评分标准，用标准差检测分歧，自动生成多维度评估体系。
+      </p>
+      <a href="./app/" class="btn-primary">
+        🚀 立即体验
+      </a>
+    </section>
 
-  <!-- Chart -->
-  <div class="chart-area" id="chartArea">
-    <div class="chart-card glass-card">
-      <div class="chart-title">模型能力对比（AI 商定维度）</div>
-      <div class="chart-legend" id="chartLegend"></div>
-      <div class="chart-outer">
-        <div class="chart-container" id="chartContainer"></div>
-        <div class="chart-x-labels" id="chartLabels"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Cards -->
-  <div class="cards-area" id="cardsArea">
-    <div class="cards-grid" id="cardsGrid"></div>
-  </div>
-
-</div>
-
-<!-- History -->
-<div class="page" style="padding-bottom:60px">
-  <div class="history-area" id="historyArea">
-    <div class="history-card glass-card">
-      <div class="history-header" onclick="toggleHistory()">
-        <span class="history-title">📋 历史记录</span>
-        <div class="history-actions" onclick="event.stopPropagation()">
-          <button class="btn-sm danger" onclick="clearHistory()">清空</button>
-          <button class="btn-sm" onclick="exportHistoryJSON()">导出备份</button>
+    <!-- ===== Core Features ===== -->
+    <section class="section">
+      <h2 class="section-title">✦ 核心功能</h2>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🔗</div>
+          <div class="feature-name">多模型并排对比</div>
+          <div class="feature-desc">同一 Prompt 同时发送给多个大模型（DeepSeek、Kimi、通义千问等），回答并排展示，直观对比差异</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">⚖️</div>
+          <div class="feature-name">交叉评分算法</div>
+          <div class="feature-desc">每个 AI 既当选手又当评委，但评委不给自己打分（双向回避），确保评分客观公正</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🤝</div>
+          <div class="feature-name">AI 商定评分标准</div>
+          <div class="feature-desc">由多个 AI 自主协商生成评分维度与权重，无需人工预设，自动形成多维度评估体系</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📊</div>
+          <div class="feature-name">标准差分歧检测</div>
+          <div class="feature-desc">通过评分标准差识别评委分歧较大的回答，高亮标记共识点与争议点</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🎨</div>
+          <div class="feature-name">毛玻璃可视化</div>
+          <div class="feature-desc">采用 Glassmorphism 设计风格，毛玻璃卡片+渐变背景，视觉体验流畅</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📋</div>
+          <div class="feature-name">差异分析报告</div>
+          <div class="feature-desc">自动生成对比报告：共识区域、分歧区域、各模型独特观点，一目了然</div>
         </div>
       </div>
-      <div class="history-list show" id="historyList"></div>
-    </div>
-  </div>
-</div>
+    </section>
 
-<div class="toast" id="toast"></div>
-
-<script>
-// ===================================================================
-// MOCK DATA — 全部手写，非真实 AI 输出
-// ===================================================================
-
-const PRESETS = [
-  {id:'g1',category:'文案写作',text:'为一款"用户反馈智能分析工具"撰写产品介绍，面向B端产品经理，200字以内，突出AI分析能力。'},
-  {id:'g2',category:'信息总结',text:'总结以下会议纪要的核心要点，按优先级排列：\n\n[在此粘贴会议纪要文本]'},
-  {id:'g3',category:'头脑风暴',text:'如何提升AI产品的用户留存率？请给出5个具体可执行的方案，并说明每个方案的预期效果。'},
-  {id:'g4',category:'产品分析',text:'分析Kimi和豆包在产品定位、目标用户、核心功能上的差异，并说明各自的竞争优势。'},
-  {id:'g5',category:'数据分析',text:'以下是某App的周活跃用户数据，请分析趋势并给出产品优化建议：\n\n[在此粘贴数据]'},
-  {id:'g6',category:'翻译',text:'将以下中文翻译成英文，保持专业感和流畅度：\n\n"人工智能正在深刻改变法律行业的工作方式，从合同审查到类案检索，AI工具显著提升了法律服务的效率和准确性。"'},
-  {id:'g7',category:'文案写作',text:'为一场"AI产品经理的模型选型策略"技术分享会写一段开场白（150字），吸引听众注意力。'},
-  {id:'g8',category:'头脑风暴',text:'作为一个法律科技创业团队，列出5个可以用AI解决的律师日常痛点，并说明技术可行性。'}
-];
-
-// AI-negotiated dimensions (Round 1 result)
-const NEGOTIATED_DIMS = [
-  {key:'可行性',label:'方案可行性',definition:'方案是否具备清晰的落地路径和实施条件，所需资源和时间是否合理',color:'#6366F1'},
-  {key:'创新性',label:'创新性',definition:'方案是否提出了有别于常见留存策略的创新思路',color:'#8B5CF6'},
-  {key:'数据支撑',label:'数据支撑度',definition:'方案是否有量化预期效果或引用行业数据佐证',color:'#10B981'},
-  {key:'针对性',label:'AI产品针对性',definition:'方案是否针对AI产品交互特性，而非套用通用SaaS留存策略',color:'#F59E0B'}
-];
-
-// 5 models mock answers
-const MOCK_RESULTS = [
-  {model_name:'deepseek',display_name:'DeepSeek',icon:'D',av:'av-ds',elapsed_ms:3200,error:null,tokens_used:450,
-   content:`### 提升AI产品用户留存率的五个方案
-
-**1. 构建个性化体验引擎**
-基于用户行为数据建立动态用户画像，在交互中实时调整输出风格和内容偏好。例如：为新用户提供引导式对话，为重度用户开放高级参数调节。预期可将次日留存率提升 15%-20%。
-
-**2. 引入渐进式功能解锁**
-将高级功能（如长文生成、批量处理、API调用）设计为"使用天数+活跃行为"双维度解锁机制，而非一次性付费墙。用户第 3/7/14 天分别解锁新能力，形成持续的"惊喜感"。预期 7 日留存提升 25%。
-
-**3. 建立"AI 使用成长轨迹"**
-为用户生成可视化的使用报告：累计对话次数、最长连续使用天数、效率提升估算等。用户可以看到"自己用 AI 做了多少事"，产生情感绑定。预期 30 日留存提升 10%-15%。
-
-**4. 场景化推送与召回**
-根据用户历史提问类型，在合理时间推送相关场景模板（如"周一早上，帮你规划本周工作？"）。推送需节制——每周不超过 2 次，且提供一键关闭。预期召回率 8%-12%。
-
-**5. 社群驱动的共创生态**
-建立用户提示词分享社区，允许用户发布自己的优质 Prompt 模板并获得点赞/评论。优秀创作者可获得"Prompt 达人"标识。社区黏性会反哺产品留存，预期活跃用户月留存提升 20%。`},
-
-  {model_name:'kimi',display_name:'Kimi',icon:'K',av:'av-ki',elapsed_ms:5100,error:null,tokens_used:520,
-   content:`### 提升AI产品留存率的五个策略
-
-**1. 构建用户成长体系**
-设计完整的等级体系：新手→探索者→专家→创世者。每个等级对应不同的功能权限和身份标识。用户通过使用天数和交互质量获得升级积分，形成正向激励循环。预期次日留存可提升 18%。
-
-**2. 打造"AI工作助手"定位**
-不只是聊天工具，而是深度嵌入工作流的助手。例如：支持文件上传并基于文件内容对话、支持保存对话为模板以便复用、支持将多次对话串联成项目。当用户把产品融入日常工作后，替换成本大幅增加。预期月留存提升 30%。
-
-**3. 智能推荐与发现**
-基于用户使用模式，在首页推荐可能感兴趣的新用法。例如：经常写代码的用户 → 推荐"代码审查"功能；经常写文案的用户 → 推荐"A/B 测试文案生成"。让用户持续发现产品新价值。
-
-**4. 社交裂变与协作**
-支持对话分享（生成精美分享卡片）、团队协作空间（共享对话历史）、Prompt 模板市场。社交传播带来新用户，协作功能锁定老用户。预期通过裂变降低获客成本 40%。
-
-**5. 数据驱动的体验优化**
-建立用户行为漏斗分析：注册→首次对话→次日回访→7日活跃→付费转化。识别每个环节的流失原因并针对性优化。例如：发现"首次对话后 24 小时内无回访"的用户流失率高达 80%，可在 24 小时节点触发个性化召回。`},
-
-  {model_name:'wenxin',display_name:'文心一言',icon:'文',av:'av-wx',elapsed_ms:4000,error:null,tokens_used:480,
-   content:`### AI 产品留存率提升方案
-
-**1. 个性化内容推荐**
-通过分析用户的提问历史和偏好标签，在首页智能推荐相关话题、热门 Prompt 模板和行业案例。让用户每次打开都能看到感兴趣的内容，提升回访意愿。预计新用户次日留存可提升 12%-18%。
-
-**2. 游戏化激励机制**
-设计成就系统和连续使用奖励：连续登录 7 天解锁"深度思考模式"、完成 100 次对话获得"对话达人"勋章。通过即时反馈和成就感驱动持续使用。行业数据显示游戏化可提升 7 日留存 20%-30%。
-
-**3. 场景化模板库建设**
-针对不同职业人群（产品经理/运营/开发者/学生）提供开箱即用的对话模板。用户不需要思考"问什么"，直接点选就能获得高质量回答。降低使用门槛 = 降低流失率。
-
-**4. 用户反馈闭环**
-建立"回答有用/没用"的即时评价机制，将用户反馈用于模型微调和功能优化。被采纳反馈的用户会收到通知："感谢你的反馈，我们已优化了 XX 功能"。用户感到被重视会提升忠诚度。
-
-**5. 多端无缝体验**
-确保 Web、移动端、桌面应用之间的对话历史实时同步。用户在地铁上用手机提问，到公司可以用电脑继续对话。无缝切换减少场景转换导致的流失。`},
-
-  {model_name:'tongyi',display_name:'通义千问',icon:'通',av:'av-ty',elapsed_ms:6200,error:null,tokens_used:390,
-   content:`### 五个提升AI产品留存率的方案
-
-**1. 优化首次体验**
-用户第一次使用 AI 产品的前 3 分钟决定了是否会有第二次。设计引导式新手教程，在对话中自然地展示核心功能。例如：用预设的引导性问题让用户立即体验 AI 能力，而非面对空白输入框不知所措。预期次日留存提升 15%。
-
-**2. 定期推送优质内容**
-每周推送 1-2 次精选的 AI 使用技巧或行业案例。内容要有实用价值而非纯营销。例如"本周最受欢迎的 5 个 Prompt"或"一个帮你节省 2 小时的 AI 技巧"。
-
-**3. 建立积分与权益体系**
-使用产品获得积分，积分可以兑换高阶功能使用次数（如超长文本生成）。免费用户通过活跃行为也能体验高级功能，激发付费意愿的同时提升留存。
-
-**4. 社区运营**
-建立用户社群（微信群/飞书群），在群内分享使用技巧、收集反馈、组织 Prompt 创作比赛。社群归属感能显著降低用户流失。
-
-**5. 持续的产品迭代**
-保持每月至少一次功能更新，让用户感受到产品在进步。通过版本日志、更新弹窗等方式告知用户新功能，激发"回来看看"的好奇心。`},
-
-  {model_name:'doubao',display_name:'豆包',icon:'豆',av:'av-db',elapsed_ms:3800,error:null,tokens_used:430,
-   content:`### AI产品留存提升——5个接地气的思路
-
-**1. 把"用过就忘"变成"上瘾回路"**
-借鉴短视频的推荐逻辑——用户每次打开都能看到"你可能想聊的话题"，基于上次对话智能延展。比如上次聊了健身计划，下次首页推荐"这周的训练计划执行得怎么样？帮我调整一下？"让用户觉得"这产品懂我"。预期次日留存提升 20%-25%。
-
-**2. 绑进用户的工作流**
-和飞书、钉钉、微信打通——用户在工作群 @一下豆包就能把问题丢进来，回答自动回群。当 AI 成为工作群里的"编外同事"，替换成本就上去了。这个方向字节内部验证过，IM 集成后的用户月留存比 Web 端高 35%。
-
-**3. 造节 + 热点运营**
-比如"每周五下午 4 点的 AI 周报生成时间""双十一前每天的购物决策助手"。用时间节点和外部热点制造"回来看看"的理由。运营驱动比纯产品功能更灵活，可以快速试错。预期活动期间 DAU 提升 40%-60%。
-
-**4. "你的 AI 档案馆"**
-不只是干巴巴的对话记录，而是把用户的对话历史加工成可视化故事——"这个月你用豆包写了 3 篇方案、分析了 15 组数据、学了 20 个新概念"。把使用量变成果实感，满足用户的"自我展示"需求。这个功能在年轻用户中分享率很高。
-
-**5. 语音交互降低使用门槛**
-很多人不打字——上班通勤、做家务、带娃间隙。强化语音输入和语音回复，让用户在"不方便打字"的场景下也能用。语音用户的日均使用时长是纯文字用户的 1.8 倍，自然留存也更高。`}
-];
-
-// Mock scores — 5 models, cross-scored by the other 4 (self-exclude)
-const MOCK_SCORES = [
-  { // DeepSeek — judged by Kimi, WenXin, TongYi, Doubao
-    model_name:'deepseek',
-    judge_scores:{
-      kimi:{'可行性':{score:9,reason:'每个方案都给出了明确的落地路径，渐进式解锁的设计细节充分，实施难度可控。'},'创新性':{score:7,reason:'个性化引擎和成长轨迹思路好，但社群共创属于常见策略，整体偏成熟打法。'},'数据支撑':{score:9,reason:'每个方案都给出了量化预期（15-20%、25%等），数据颗粒度在五个模型中最佳。'},'针对性':{score:8,reason:'成长轨迹和渐进式解锁确实针对AI对话产品的交互特点设计。'}},
-      wenxin:{'可行性':{score:8,reason:'方案具体可执行，但社群共创需要已有用户基础，冷启动阶段难落地。'},'创新性':{score:7,reason:'五个方案思路成熟但整体偏行业最佳实践，缺少突破性创新。'},'数据支撑':{score:8,reason:'量化数据丰富但部分指标（如25%）未经行业基准对照，偏乐观。'},'针对性':{score:8,reason:'个性化引擎和对话模板复用确实是AI产品核心留存手段。'}},
-      tongyi:{'可行性':{score:9,reason:'方案落地路径非常清晰，特别是渐进式解锁和推送机制可快速上线验证。'},'创新性':{score:8,reason:'"使用成长轨迹"的概念有差异化价值，能让用户感知到AI使用的积累效应。'},'数据支撑':{score:7,reason:'数据较丰富但缺少引用来源，预期数据的置信度说明不足。'},'针对性':{score:8,reason:'多数方案紧扣AI对话产品的交互特点，非简单套用工具类留存策略。'}},
-      doubao:{'可行性':{score:8,reason:'五个方案整体可行，但社群共创对运营资源要求高，不适合小团队。'},'创新性':{score:7,reason:'方案扎实但偏学院派，和豆包的"接地气"思路形成对比。'},'数据支撑':{score:8,reason:'量化数据丰富，但缺少A/B测试或行业基准的对照。'},'针对性':{score:8,reason:'方案确实围绕AI产品展开，不是通用SaaS留存套路。'}}
-    },
-    avg_scores:{'可行性':8.5,'创新性':7.3,'数据支撑':8.0,'针对性':8.0},
-    ai_group_avg:8.0,total:8.0,
-    std_dev:{'可行性':0.5,'创新性':0.43,'数据支撑':0.71,'针对性':0},
-    has_self_judge:false
-  },
-  { // Kimi — judged by DeepSeek, WenXin, TongYi, Doubao
-    model_name:'kimi',
-    judge_scores:{
-      deepseek:{'可行性':{score:8,reason:'用户成长体系设计完整，但工作流嵌入的"项目串联"功能开发量较大，短期难落地。'},'创新性':{score:8,reason:'工作助手定位+项目串联的思路与纯聊天工具有明显差异化。'},'数据支撑':{score:7,reason:'部分量化数据合理但缺少行业对标，如"30%月留存提升"的基准未说明。'},'针对性':{score:9,reason:'工作助手定位精准抓住了AI产品的核心差异——不仅是聊天，更是生产力工具。'}},
-      wenxin:{'可行性':{score:7,reason:'社交裂变和模板市场对初创产品门槛较高，需先有内容生态基础。'},'创新性':{score:8,reason:'工作流嵌入和项目串联思路有差异化价值，用户成长体系的设计层级分明。'},'数据支撑':{score:8,reason:'用户行为漏斗分析框架有说服力，具体case（80%流失率）增强了可信度。'},'针对性':{score:8,reason:'整体策略确实围绕AI工具属性展开，不局限于通用留存手段。'}},
-      tongyi:{'可行性':{score:7,reason:'工作流嵌入和模板市场的实现复杂度被低估，尤其跨项目串联的技术挑战。'},'创新性':{score:8,reason:'Prompt模板市场+团队协作空间的组合有一定创新性。'},'数据支撑':{score:7,reason:'量化数据偏少，"降低获客成本40%"的推算逻辑不够透明。'},'针对性':{score:8,reason:'多数方案确实针对AI助手的使用场景设计，但裂变策略偏社交产品思路。'}},
-      doubao:{'可行性':{score:7,reason:'用户成长体系+工作流嵌入的思路不错，但落地需要的资源比预想的多。'},'创新性':{score:8,reason:'和豆包的思路互补——Kimi偏向结构化体系，豆包偏向用户情感连接。'},'数据支撑':{score:7,reason:'数据分析框架有说服力，但具体数字的推算过程可以更透明。'},'针对性':{score:8,reason:'工作助手定位精准，确实抓住了AI工具型产品的留存关键。'}}
-    },
-    avg_scores:{'可行性':7.3,'创新性':8.0,'数据支撑':7.3,'针对性':8.3},
-    ai_group_avg:7.7,total:7.7,
-    std_dev:{'可行性':0.43,'创新性':0,'数据支撑':0.43,'针对性':0.43},
-    has_self_judge:false
-  },
-  { // WenXin — judged by DeepSeek, Kimi, TongYi, Doubao
-    model_name:'wenxin',
-    judge_scores:{
-      deepseek:{'可行性':{score:8,reason:'游戏化和模板库方案门槛低、见效快，但多端同步对技术资源有较高要求。'},'创新性':{score:7,reason:'游戏化和反馈闭环属于成熟策略，在AI产品中的应用缺乏独特创新。'},'数据支撑':{score:7,reason:'引用了行业数据（20-30%）但未注明来源和适用条件。'},'针对性':{score:7,reason:'多端同步和模板库对AI产品有一定针对性，但游戏化偏通用策略。'}},
-      kimi:{'可行性':{score:8,reason:'方案整体务实可落地，反馈闭环和模板库是性价比最高的两项。'},'创新性':{score:7,reason:'五个方案覆盖面广但缺少突破性创新，更多是已有策略在AI场景的延伸。'},'数据支撑':{score:7,reason:'数据引用合理但深度不足，缺少对AI产品留存基准的对比。'},'针对性':{score:7,reason:'反馈闭环的思路适合AI产品，其他方案可套用于任何产品类型。'}},
-      tongyi:{'可行性':{score:8,reason:'方案实用性强，模板库和即时评价功能开发量小、A/B测试容易。'},'创新性':{score:7,reason:'整体思路稳健但缺乏惊喜，没有跳出常规留存策略框架。'},'数据支撑':{score:8,reason:'游戏化数据（20-30%）有行业共识支撑，模板库的定性分析也较扎实。'},'针对性':{score:8,reason:'模板库和回答评价直接针对AI对话产品的核心场景，契合度高。'}},
-      doubao:{'可行性':{score:8,reason:'方案都比较务实，模板库和反馈闭环上手快、成本低。'},'创新性':{score:7,reason:'和豆包的热点运营思维相比，文心的方案偏稳健保守。'},'数据支撑':{score:7,reason:'数据引用合理但缺少第一手验证，可信度中等。'},'针对性':{score:7,reason:'反馈闭环是亮点，但整体对AI产品特性的挖掘不够深。'}}
-    },
-    avg_scores:{'可行性':8.0,'创新性':7.0,'数据支撑':7.3,'针对性':7.3},
-    ai_group_avg:7.4,total:7.4,
-    std_dev:{'可行性':0,'创新性':0,'数据支撑':0.43,'针对性':0.43},
-    has_self_judge:false
-  },
-  { // TongYi — judged by DeepSeek, Kimi, WenXin, Doubao
-    model_name:'tongyi',
-    judge_scores:{
-      deepseek:{'可行性':{score:7,reason:'首次体验优化和推送策略容易落地，但积分体系的搭建需要完整的产品规划和技术支持。'},'创新性':{score:6,reason:'五个方案均为行业常见留存手段，缺少针对AI产品的差异化创新。'},'数据支撑':{score:6,reason:'量化数据偏少且笼统，大部分方案缺少具体的预期效果数据。'},'针对性':{score:6,reason:'方案偏向通用产品运营策略，未充分利用AI产品的独特交互特性。'}},
-      kimi:{'可行性':{score:7,reason:'方案可行但较为基础，适合早期产品快速验证，对成熟产品增量有限。'},'创新性':{score:7,reason:'思路偏常规但执行建议具体（如"每周推送1-2次"），细节体现了产品思考。'},'数据支撑':{score:6,reason:'除"15%次日留存提升"外，其他方案未提供量化预期，说服力不足。'},'针对性':{score:7,reason:'新手引导优化确实是AI产品的关键痛点，其他方案则偏通用。'}},
-      wenxin:{'可行性':{score:8,reason:'方案实操性强，尤其推送和社区运营投入产出比高，适合资源有限的团队。'},'创新性':{score:6,reason:'整体思路较为常规，缺少让用户眼前一亮的创新点。'},'数据支撑':{score:7,reason:'方案清晰但数据论证薄弱，更多依赖定性分析而非定量支撑。'},'针对性':{score:7,reason:'部分方案（如引导式对话）确实针对AI产品特性，但深度不够。'}},
-      doubao:{'可行性':{score:7,reason:'方案基础扎实，但相比其他模型的回答，缺少对AI产品特殊性的思考。'},'创新性':{score:6,reason:'和豆包自己的"造节运营"思路对比，通义的回答更偏传统方法论。'},'数据支撑':{score:6,reason:'数据支撑是明显短板，五个方案中只有一个有具体数字。'},'针对性':{score:7,reason:'引导式对话方向对，但整体偏通用互联网产品思维。'}}
-    },
-    avg_scores:{'可行性':7.3,'创新性':6.3,'数据支撑':6.3,'针对性':6.8},
-    ai_group_avg:6.6,total:6.6,
-    std_dev:{'可行性':0.43,'创新性':0.43,'数据支撑':0.43,'针对性':0.43},
-    has_self_judge:false
-  },
-  { // Doubao — judged by DeepSeek, Kimi, WenXin, TongYi
-    model_name:'doubao',
-    judge_scores:{
-      deepseek:{'可行性':{score:8,reason:'IM集成和语音交互有字节的实践基础，可行性高；造节运营门槛低、启动快。'},'创新性':{score:9,reason:'"AI档案馆"和IM集成的思路很有差异化，和其他四个模型的回答风格明显不同。'},'数据支撑':{score:8,reason:'引用了IM集成35%提升、语音1.8倍时长、活动40-60%DAU提升等具体数据。'},'针对性':{score:8,reason:'语音交互和IM集成确实抓住了AI产品区别于传统SaaS的核心差异。'}},
-      kimi:{'可行性':{score:7,reason:'IM集成需跨平台合作，不是纯产品层面能解决的；但造节和档案馆方案易于实施。'},'创新性':{score:9,reason:'五个方案中创新性最突出——"上瘾回路"借短视频逻辑、造节借电商思路，跨界借鉴有新意。'},'数据支撑':{score:8,reason:'数据引用较丰富且有内部验证感（"字节内部验证过"），虽然来源不可查但增强了说服力。'},'针对性':{score:9,reason:'方案深度绑定AI的交互特性（语音、对话延展、AI周报），是五个模型中最具AI原生思维的。'}},
-      wenxin:{'可行性':{score:7,reason:'整体方案偏运营驱动，IM集成和语音交互需要较大技术投入。'},'创新性':{score:9,reason:'思维方式和另外四个模型完全不同——从用户情感和场景切入，而非功能罗列。'},'数据支撑':{score:7,reason:'数据引用多但来源偏内部经验，外部可验证性不足。'},'针对性':{score:8,reason:'"上瘾回路"和语音交互直接回应了AI对话产品最核心的使用场景。'}},
-      tongyi:{'可行性':{score:8,reason:'造节和档案馆方案易于实施，IM集成虽然效果好但需要商务推进。'},'创新性':{score:9,reason:'"AI档案馆"的概念非常出色——把使用数据变成用户愿意分享的故事，有社交裂变潜力。'},'数据支撑':{score:7,reason:'数据点丰富但部分指标（如DAU提升40-60%）缺乏详细的推算逻辑。'},'针对性':{score:8,reason:'整体思维是AI原生的——从用户为什么不方便打字，到用户为什么想炫耀使用量。'}}
-    },
-    avg_scores:{'可行性':7.5,'创新性':9.0,'数据支撑':7.5,'针对性':8.3},
-    ai_group_avg:8.1,total:8.1,
-    std_dev:{'可行性':0.5,'创新性':0,'数据支撑':0.5,'针对性':0.43},
-    has_self_judge:false
-  }
-];
-
-let HISTORY_DATA = [
-  {id:'h1',timestamp:'07-06 16:30',prompt:'分析Kimi和豆包在产品定位上的差异',modelCount:5,dimCount:4,topScore:8.1},
-  {id:'h2',timestamp:'07-06 10:15',prompt:'为一款用户反馈分析工具写产品介绍',modelCount:5,dimCount:3,topScore:8.3},
-  {id:'h3',timestamp:'07-05 14:20',prompt:'如何提升AI产品的用户留存率？',modelCount:5,dimCount:4,topScore:8.1},
-];
-
-// ===================================================================
-// STATE
-// ===================================================================
-let state = {
-  prompt:'',selectedPreset:null,status:'idle',
-  results:[],dimensions:[],scores:[],
-  diffEnabled:false,expandedDimensions:{},expandedCards:{}
-};
-
-// ===================================================================
-// INIT
-// ===================================================================
-function init(){
-  renderPresets();updateCompareButton();updateCharCount();renderHistory();
-  state.prompt = PRESETS[2].text; state.selectedPreset = 'g3';
-  document.getElementById('promptInput').value = state.prompt;
-  updateCompareButton();updateCharCount();renderPresets();
-}
-
-// ===================================================================
-// PRESETS
-// ===================================================================
-function renderPresets(){
-  document.getElementById('presetTags').innerHTML = PRESETS.map(p =>
-    `<button class="preset-tag${state.selectedPreset===p.id?' selected':''}" onclick="selectPreset('${p.id}')" title="${escAttr(p.text)}">${p.category}</button>`
-  ).join('');
-}
-function selectPreset(id){
-  const p = PRESETS.find(x=>x.id===id); if(!p)return;
-  state.prompt=p.text;state.selectedPreset=id;
-  document.getElementById('promptInput').value=state.prompt;
-  updateCompareButton();updateCharCount();renderPresets();
-}
-function onPromptInput(){
-  state.prompt=document.getElementById('promptInput').value;
-  state.selectedPreset=null;updateCompareButton();updateCharCount();renderPresets();
-}
-function updateCharCount(){
-  const c=state.prompt.length;
-  document.getElementById('charCount').textContent=c+' 字';
-  document.getElementById('charCount').className='char-count'+(c>2000?' warn':'');
-  document.getElementById('charWarn').className='char-warn-msg'+(c>2000?' show':'');
-}
-function updateCompareButton(){
-  const btn=document.getElementById('compareBtn');
-  const empty=state.prompt.trim()==='';
-  const busy=state.status==='loading'||state.status==='round1'||state.status==='round2';
-  btn.disabled=empty||busy;
-  if(!busy){
-    btn.classList.remove('loading');
-    btn.innerHTML=state.status==='scored'
-      ?'<span class="btn-icon">🔄</span> 重新对比<span class="spinner"></span>'
-      :'<span class="btn-icon">🚀</span> 开始对比<span class="spinner"></span>';
-  }
-}
-
-// ===================================================================
-// COMPARE FLOW — Two Rounds
-// ===================================================================
-function startCompare(){
-  if(state.prompt.trim()===''||state.status==='loading')return;
-  resetResults();
-  state.status='loading';updateCompareButton();
-  const btn=document.getElementById('compareBtn');
-  btn.classList.add('loading');
-  btn.innerHTML='⏳ 正在调用模型……<span class="spinner"></span>';
-  showBanner('info','⏳ 并行调用 5 个模型……');
-  showSkeletons();
-
-  setTimeout(()=>{
-    state.results=MOCK_RESULTS;
-    showBanner('ok','✅ 全部模型调用完成（5/5），进入评分阶段');
-
-    setTimeout(()=>{
-      state.status='round1';
-      showBanner('phase','🔍 Round 1 — 5 位评委各自提议评分标准，由一位评委综合所有提案后输出统一维度……');
-
-      setTimeout(()=>{
-        state.dimensions=NEGOTIATED_DIMS;
-        renderDimensions();
-        state.status='round2';
-        showBanner('phase','📊 Round 2 — 5 位评委按统一标准交叉打分（每位评委评 4 个回答，回避自己）……');
-
-        setTimeout(()=>{
-          state.scores=MOCK_SCORES;
-          state.status='scored';
-          showBanner('ok','✅ 评分完成 — AI 商定 4 条维度 × 交叉评分（4 位评委 / 回答）',4000);
-          updateCompareButton();
-          saveToHistory();
-          renderAll();
-        },1200);
-      },1200);
-    },400);
-  },1500);
-}
-
-function resetResults(){
-  state.results=[];state.dimensions=[];state.scores=[];state.status='idle';
-  state.expandedDimensions={};state.expandedCards={};state._diffData=null;
-  hide('cardsArea');hide('chartArea');hide('dimsPanel');hide('toolbar');
-  document.getElementById('exportBtn').disabled=true;
-  document.getElementById('statusBanner').className='status-banner';
-  document.getElementById('cardsGrid').innerHTML='';
-  document.getElementById('chartContainer').innerHTML='';
-  document.getElementById('chartLabels').innerHTML='';
-}
-function hide(id){document.getElementById(id).classList.remove('show');}
-function show(id){document.getElementById(id).classList.add('show');}
-
-function showSkeletons(){
-  show('cardsArea');show('toolbar');
-  document.getElementById('cardsGrid').innerHTML=[1,2,3,4,5].map(()=>`
-    <div class="skeleton-card">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
-        <div class="skeleton-avatar"></div>
-        <div class="skeleton-line w40" style="margin-bottom:0"></div>
-        <div class="skeleton-line w60" style="margin-bottom:0;max-width:60px;margin-left:auto"></div>
+    <!-- ===== Scoring Flow ===== -->
+    <section class="section">
+      <h2 class="section-title">✦ 评分流程</h2>
+      <div class="scoring-flow">
+        <div class="flow-step input">📝 输入 Prompt</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step models">🤖 多模型回答</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step judge">⚖️ 交叉评分</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step result">📊 分析报告</div>
       </div>
-      <div class="skeleton-line w100"></div><div class="skeleton-line w80"></div>
-      <div class="skeleton-line w100"></div><div class="skeleton-line w60"></div>
-      <div class="skeleton-line w80"></div><div class="skeleton-line w40"></div>
-    </div>`).join('');
-}
+    </section>
 
-function showBanner(type,msg,autoHideMs){
-  const b=document.getElementById('statusBanner');
-  b.className='status-banner show '+type;b.textContent=msg;
-  if(autoHideMs){clearTimeout(b._t);b._t=setTimeout(()=>{b.className='status-banner';},autoHideMs);}
-}
-
-function saveToHistory(){
-  const top=Math.max(...state.scores.map(s=>s.total));
-  HISTORY_DATA.unshift({
-    id:'h'+Date.now(),
-    timestamp:new Date().toLocaleString('zh-CN',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false}).replace(/\//g,'-'),
-    prompt:state.prompt.length>30?state.prompt.slice(0,30)+'……':state.prompt,
-    modelCount:state.results.length,dimCount:state.dimensions.length,topScore:top
-  });
-  renderHistory();
-}
-
-// ===================================================================
-// DIMENSIONS PANEL
-// ===================================================================
-function renderDimensions(){
-  show('dimsPanel');
-  document.getElementById('dimsSubtitle').textContent=
-    '由一位评委综合 5 位评委的独立提案后输出（共 '+NEGOTIATED_DIMS.length+' 条），后续评分均按此标准执行';
-  document.getElementById('dimsList').innerHTML=NEGOTIATED_DIMS.map(d=>`
-    <div class="dim-tag">
-      <span class="dim-tag-dot" style="background:${d.color}"></span>
-      <span class="dim-tag-name">${d.label}</span>
-      <span class="dim-tag-def">— ${d.definition}</span>
-    </div>`).join('');
-}
-
-// ===================================================================
-// RENDER ALL
-// ===================================================================
-function renderAll(){renderResults();renderChart();}
-
-function renderResults(){
-  const grid=document.getElementById('cardsGrid');
-  show('cardsArea');show('toolbar');
-  document.getElementById('exportBtn').disabled=false;
-  grid.innerHTML=state.results.map(r=>buildCard(r,state.scores.find(s=>s.model_name===r.model_name))).join('');
-}
-
-function buildCard(result,score){
-  const mk=result.model_name;
-  const ce=state.expandedCards[mk];
-  const ct=result.content||'';
-  const wc=ct.replace(/\s/g,'').length;
-  const isLong=wc>700;
-  const cc=(isLong&&!ce)?' collapsed':'';
-  let sh='';
-  if(score){
-    const dims=state.dimensions;
-    sh=`<div class="card-score">
-      <div class="score-judges">👥 ${Object.keys(score.judge_scores).length} 位评委交叉打分<br>（${Object.keys(score.judge_scores).map(getName).join('、')}）</div>
-      ${dims.map(d=>{
-        const dk=mk+'|'+d.key;
-        const exp=state.expandedDimensions[dk];
-        const w=(score.std_dev&&score.std_dev[d.key]>2.0)?'<span class="score-warn">⚠️ 分歧较大</span>':'';
-        return`<div class="score-dim-row" onclick="toggleDetail('${mk}','${d.key}')">
-          <div class="score-dim-left"><span class="score-dim-dot" style="background:${d.color}"></span>${d.label}${w}</div>
-          <div class="score-dim-bar-wrap"><div class="score-dim-bar" style="width:${(score.avg_scores[d.key]||0)*10}%;background:${d.color}"></div></div>
-          <span class="score-dim-val">${(score.avg_scores[d.key]||0).toFixed(1)}/10</span>
-        </div>
-        <div class="score-detail${exp?' show':''}" id="detail-${mk}-${d.key}">${buildDetail(mk,d.key,score)}</div>`;
-      }).join('')}
-      <div class="group-score-row"><span>AI 商定组综合（4 维度均值）</span><span class="group-score-val">${score.ai_group_avg.toFixed(1)}/10</span></div>
-      <div class="score-total"><span>★ 最终得分</span><span class="score-total-val">${score.total.toFixed(1)}/10</span></div>
-    </div>`;
-  }else if(result.error){
-    sh=`<div class="card-score"><div style="color:var(--danger);font-size:13px">❌ ${escHTML(result.error)}</div></div>`;
-  }else{
-    sh=`<div class="card-score"><div style="color:var(--text-disabled);font-size:13px">评分中……</div></div>`;
-  }
-  const stHTML=result.error
-    ?'<span class="card-status"><span class="status-dot err"></span>失败</span>'
-    :'<span class="card-status"><span class="status-dot ok"></span>已完成</span>';
-  const ts=result.elapsed_ms<1000?result.elapsed_ms+'ms':(result.elapsed_ms/1000).toFixed(1)+'s';
-
-  return`<div class="model-card glass-card">
-    <div class="card-header">
-      <div class="card-avatar ${result.av||''}">${result.icon}</div>
-      <span class="card-name">${result.display_name}</span>${stHTML}
-      <span class="card-time">⏱ ${ts}</span>
-    </div>
-    <div class="card-answer${cc}" id="answer-${mk}">${renderMD(ct,mk)}</div>
-    <button class="expand-btn" onclick="toggleCard('${mk}')" style="${isLong?'':'visibility:hidden;pointer-events:none'}">${ce?'收起 ▲':'展开全文（共 '+wc+' 字）▼'}</button>
-    ${sh}
-  </div>`;
-}
-
-function renderMD(text,modelKey){
-  if(!state.diffEnabled)return simpleMD(text);
-  return renderDiffMD(text,modelKey);
-}
-function simpleMD(text){
-  return mdReplace(escHTML(text));
-}
-function mdReplace(html){
-  return html
-    .replace(/^### (.+)$/gm,'<h3>$1</h3>')
-    .replace(/^## (.+)$/gm,'<h2 style="font-size:16px;font-weight:600;margin:10px 0 4px">$1</h2>')
-    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
-    .replace(/\*(.+?)\*/g,'<em>$1</em>')
-    .replace(/^\- (.+)$/gm,'<li style="margin-left:16px">$1</li>')
-    .replace(/^(\d+)\. (.+)$/gm,'<li style="margin-left:16px">$2</li>')
-    .replace(/^> (.+)$/gm,'<blockquote style="border-left:3px solid var(--primary);padding:4px 12px;margin:6px 0;color:var(--text-secondary);background:rgba(59,130,246,0.04);border-radius:0 6px 6px 0">$1</blockquote>');
-}
-
-/* ---- Diff: cross-model topic clustering ---- */
-const CLUSTER_PALETTE = [
-  'rgba(249,115,22,0.2)',   // orange
-  'rgba(139,92,246,0.2)',   // purple
-  'rgba(16,185,129,0.2)',   // green
-  'rgba(236,72,153,0.2)',   // pink
-  'rgba(6,182,212,0.2)',    // cyan
-  'rgba(234,179,8,0.2)',    // yellow
-  'rgba(99,102,241,0.2)',   // indigo
-];
-const CLUSTER_BORDER = [
-  'rgba(249,115,22,0.5)',
-  'rgba(139,92,246,0.5)',
-  'rgba(16,185,129,0.5)',
-  'rgba(236,72,153,0.5)',
-  'rgba(6,182,212,0.5)',
-  'rgba(234,179,8,0.5)',
-  'rgba(99,102,241,0.5)',
-];
-
-function ngrams(str,n){
-  const s=str.replace(/\s/g,'');const b=new Set();
-  for(let i=0;i<=s.length-n;i++)b.add(s.slice(i,i+n));
-  return b;
-}
-function jaccard(a,b){
-  if(a.size===0||b.size===0)return 0;
-  let inter=0;for(const x of a)if(b.has(x))inter++;
-  return inter/Math.max(a.size,b.size);
-}
-
-function buildClusters(allResults){
-  // collect all sentences: {text, modelIdx, sentIdx, bg, tg}
-  const all=[];
-  allResults.forEach((r,mi)=>{
-    const raw=r.content||'';
-    raw.split(/(?<=[。！？\n])/).forEach((s,si)=>{
-      const t=s.trim();
-      if(t.length<4)return;
-      all.push({text:t,modelIdx:mi,sentIdx:si,bg:ngrams(t,2),tg:ngrams(t,3)});
-    });
-  });
-
-  // pairwise similarities (only cross-model)
-  const pairs=[];
-  for(let i=0;i<all.length;i++){
-    for(let j=i+1;j<all.length;j++){
-      if(all[i].modelIdx===all[j].modelIdx)continue;
-      const sim=Math.max(jaccard(all[i].bg,all[j].bg),jaccard(all[i].tg,all[j].tg));
-      if(sim>=0.25)pairs.push({i,j,sim});
-    }
-  }
-  pairs.sort((a,b)=>b.sim-a.sim);
-
-  // union-find clustering
-  const parent=all.map((_,i)=>i);
-  function find(x){while(parent[x]!==x){parent[x]=parent[parent[x]];x=parent[x];}return x;}
-  function union(a,b){const ra=find(a),rb=find(b);if(ra!==rb)parent[rb]=ra;}
-
-  for(const p of pairs)union(p.i,p.j);
-
-  // group by root
-  const groups={};
-  all.forEach((s,i)=>{const r=find(i);if(!groups[r])groups[r]=[];groups[r].push(i);});
-
-  // filter: keep clusters with ≥2 models, assign colors
-  const clusters=[];
-  Object.values(groups).forEach(idxs=>{
-    const models=new Set(idxs.map(i=>all[i].modelIdx));
-    if(models.size<2)return;
-    // representative text: pick longest sentence
-    let best='';for(const i of idxs){if(all[i].text.length>best.length)best=all[i].text;}
-    clusters.push({idxs,modelCount:models.size,label:best.slice(0,18)+(best.length>18?'…':'')});
-  });
-  // sort by modelCount desc
-  clusters.sort((a,b)=>b.modelCount-a.modelCount);
-  // assign colors (max 7)
-  clusters.forEach((c,i)=>{c.color=i<CLUSTER_PALETTE.length?CLUSTER_PALETTE[i]:null;c.border=i<CLUSTER_BORDER.length?CLUSTER_BORDER[i]:null;});
-  return {all,clusters};
-}
-
-function getClusterFor(sentIdx,modelIdx,clusters,all){
-  // find which cluster this sentence belongs to
-  const idx=all.findIndex(s=>s.modelIdx===modelIdx&&s.sentIdx===sentIdx);
-  if(idx<0)return null;
-  for(const c of clusters){
-    if(c.idxs.includes(idx))return c;
-  }
-  return null;
-}
-
-function renderDiffMD(text,modelKey){
-  if(!state._diffData){
-    state._diffData=buildClusters(state.results);
-  }
-  const {all,clusters}=state._diffData;
-  const modelIdx=state.results.findIndex(r=>r.model_name===modelKey);
-  const sents=text.split(/(?<=[。！？\n])/);
-  const html=sents.map((s,sentIdx)=>{
-    if(s.trim().length<4)return escHTML(s);
-    const c=getClusterFor(sentIdx,modelIdx,clusters,all);
-    if(!c||!c.color)return escHTML(s);
-    return`<span style="background:${c.color};border-bottom:2px solid ${c.border};padding:1px 0;border-radius:2px">${escHTML(s)}</span>`;
-  }).join('');
-  return mdReplace(html);
-}
-
-function getName(n){const m={deepseek:'DeepSeek',kimi:'Kimi',wenxin:'文心一言',tongyi:'通义千问',doubao:'豆包'};return m[n]||n;}
-
-function buildDetail(mk,dim,score){
-  if(!score.judge_scores)return'<div style="color:var(--text-disabled)">评分暂不可用</div>';
-  let h='<h4>评委独立打分详情</h4>';
-  Object.entries(score.judge_scores).forEach(([jn,dims])=>{
-    const d=dims[dim];if(!d)return;
-    h+=`<div class="score-detail-judge"><span class="score-detail-judge-name">${getName(jn)}（评委）${jn===mk?' ⚠️ 自评':''}</span><span style="font-weight:700">${d.score}/10</span></div>
-    <div class="score-detail-reason">${escHTML(d.reason)}</div>`;
-  });
-  if(score.std_dev&&score.std_dev[dim]>2.0)
-    h+=`<div style="color:var(--warning);font-size:12px;margin-top:4px">⚠️ 标准差 ${score.std_dev[dim].toFixed(1)}，评委分歧较大，建议人工复核</div>`;
-  h+=`<div style="font-weight:600;margin-top:6px;font-size:13px">最终得分：${score.avg_scores[dim].toFixed(1)}/10（${Object.keys(score.judge_scores).length}位评委平均）</div>`;
-  return h;
-}
-
-function toggleCard(mk){state.expandedCards[mk]=!state.expandedCards[mk];renderAll();}
-function toggleDetail(mk,dim){const k=mk+'|'+dim;state.expandedDimensions[k]=!state.expandedDimensions[k];renderAll();}
-
-// ===================================================================
-// CHART
-// ===================================================================
-function renderChart(){
-  const area=document.getElementById('chartArea');
-  const cont=document.getElementById('chartContainer');
-  const legend=document.getElementById('chartLegend');
-  if(!state.scores.length||!state.dimensions.length){area.classList.remove('show');return;}
-  show('chartArea');
-
-  const dims=state.dimensions;
-  const models=state.scores.map(s=>{
-    const r=state.results.find(x=>x.model_name===s.model_name);
-    return{name:r?r.display_name:s.model_name,avgs:s.avg_scores};
-  });
-
-  legend.innerHTML=dims.map(d=>`<span><span class="chart-legend-dot" style="background:${d.color}"></span>${d.label}</span>`).join('');
-
-  const maxH=160,gl=[0,2,4,6,8,10];
-  cont.innerHTML=`
-    <div class="chart-y-axis">${gl.map(v=>'<span>'+v+'</span>').join('')}</div>
-    <div class="chart-grid">${gl.map(()=>'<div class="chart-grid-line"></div>').join('')}</div>
-    <div class="chart-bars">
-      ${models.map(m=>`
-        <div style="display:flex;flex-direction:column;align-items:center;flex:1;min-width:0">
-          <div class="chart-model-group">
-            ${dims.map(d=>{
-              const h=((m.avgs[d.key]||0)/10)*maxH;
-              return`<div class="chart-bar-wrap"><div class="chart-bar" style="height:${h}px;background:${d.color}" data-tip="${m.name}·${d.label}: ${(m.avgs[d.key]||0).toFixed(1)}"></div></div>`;
-            }).join('')}
+    <!-- ===== AI Standard ===== -->
+    <section class="section">
+      <h2 class="section-title">✦ AI 商定评分标准</h2>
+      <div class="ai-standard">
+        <div class="ai-standard-title">🤝 AI 自主协商流程</div>
+        <div class="ai-standard-steps">
+          <div class="ai-standard-step">
+            <span class="step-num">1</span>
+            <span>各 AI 模型独立分析 Prompt，提出自己认为重要的评分维度</span>
           </div>
-        </div>`).join('')}
-    </div>`;
-  document.getElementById('chartLabels').innerHTML=models.map(m=>`<span class="chart-x-label">${m.name}</span>`).join('');
-}
-
-// ===================================================================
-// DIFF & EXPORT
-// ===================================================================
-function toggleDiff(){
-  state.diffEnabled=!state.diffEnabled;
-  state._diffData=null;
-  document.getElementById('diffTrack').classList.toggle('on',state.diffEnabled);
-  if(state.results.length)renderResults();
-}
-
-function exportReport(){
-  if(!state.results.length)return;
-  const now=new Date();
-  const ds=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');
-  const ts=ds+' '+String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
-  let md=`# Prompt 对比评测报告\n\n- **测试问题**：${state.prompt}\n- **测试时间**：${ts}\n- **参与模型**：${state.results.map(r=>r.display_name).join('、')}\n- **评分方式**：两轮制 AI 商定 + 交叉评分\n\n---\n\n## 评分标准（Round 1 AI 商定）\n\n`;
-  state.dimensions.forEach(d=>{md+=`- **${d.label}**：${d.definition}\n`;});
-  md+=`\n---\n\n## 评分总览\n\n| 模型 | ${state.dimensions.map(d=>d.label).join(' | ')} | AI商定综合 | 最终得分 |\n`;
-  md+=`|------|${state.dimensions.map(()=>'--------').join('|')}|-----------|--------|\n`;
-  state.scores.forEach(s=>{
-    const r=state.results.find(x=>x.model_name===s.model_name);
-    md+=`| ${r?r.display_name:s.model_name} | ${state.dimensions.map(d=>(s.avg_scores[d.key]||0).toFixed(1)+'/10').join(' | ')} | ${s.ai_group_avg.toFixed(1)}/10 | ${s.total.toFixed(1)} |\n`;
-  });
-  md+=`\n---\n\n## 各模型回答\n\n`;
-  state.results.forEach(r=>{md+=`### ${r.display_name}（⏱ ${r.elapsed_ms<1000?r.elapsed_ms+'ms':(r.elapsed_ms/1000).toFixed(1)+'s'}）\n${r.content}\n\n`;});
-  md+=`\n---\n\n## 评分详情\n\n`;
-  state.scores.forEach(s=>{
-    const r=state.results.find(x=>x.model_name===s.model_name);
-    md+=`### ${r?r.display_name:s.model_name}（综合 ${s.total.toFixed(1)}/10）\n\n`;
-    if(s.judge_scores)Object.entries(s.judge_scores).forEach(([jn,dims])=>{
-      md+=`**${getName(jn)}（评委）：**\n`;
-      Object.entries(dims).forEach(([dk,d])=>{md+=`- ${dk} ${d.score}/10：${d.reason}\n`;});
-      md+='\n';
-    });
-  });
-  const blob=new Blob(['﻿'+md],{type:'text/markdown;charset=UTF-8'});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement('a');a.href=url;a.download=`评测报告-${ds}.md`;
-  document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
-  showToast('报告已导出');
-}
-
-function exportHistoryJSON(){
-  const data={exported_at:new Date().toISOString(),total_records:HISTORY_DATA.length,records:HISTORY_DATA};
-  const blob=new Blob(['﻿'+JSON.stringify(data,null,2)],{type:'application/json;charset=UTF-8'});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement('a');a.href=url;a.download=`历史记录备份-${new Date().toISOString().slice(0,10)}.json`;
-  document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
-  showToast('历史备份已导出');
-}
-
-// ===================================================================
-// HISTORY
-// ===================================================================
-function renderHistory(){
-  const c=document.getElementById('historyList');
-  if(!HISTORY_DATA.length){c.innerHTML='<div class="history-empty">暂无历史记录，完成一次对比后自动保存</div>';return;}
-  c.innerHTML=HISTORY_DATA.map(h=>`
-    <div class="history-item" onclick="loadHistory('${h.id}')">
-      <div class="history-item-left">
-        <span class="history-date">${h.timestamp}</span>
-        <span class="history-prompt">${h.prompt}</span>
+          <div class="ai-standard-step">
+            <span class="step-num">2</span>
+            <span>汇总所有维度提案，由 AI 讨论合并相似项、去除冗余项</span>
+          </div>
+          <div class="ai-standard-step">
+            <span class="step-num">3</span>
+            <span>AI 协商确定各维度权重，形成统一评分标准</span>
+          </div>
+          <div class="ai-standard-step">
+            <span class="step-num">4</span>
+            <span>按商定标准对每个回答逐维度打分，评委与被评者双向回避</span>
+          </div>
+          <div class="ai-standard-step">
+            <span class="step-num">5</span>
+            <span>计算标准差检测分歧，生成最终评估报告</span>
+          </div>
+        </div>
       </div>
-      <span class="history-arrow">▶</span>
-    </div>`).join('');
-}
-function toggleHistory(){document.getElementById('historyList').classList.toggle('show');}
-function scrollToHistory(){document.getElementById('historyArea').scrollIntoView({behavior:'smooth'});}
-function loadHistory(id){
-  resetResults();
-  state.dimensions=NEGOTIATED_DIMS;
-  state.results=MOCK_RESULTS;
-  state.scores=MOCK_SCORES;
-  state.status='scored';
-  updateCompareButton();
-  renderDimensions();renderAll();
-  show('toolbar');document.getElementById('exportBtn').disabled=false;
-  showBanner('ok','📋 已加载历史记录（演示数据）');
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-function clearHistory(){
-  if(confirm('确定要清空全部历史记录吗？此操作不可恢复。')){HISTORY_DATA=[];renderHistory();showToast('历史记录已清空');}
-}
+    </section>
 
-// ===================================================================
-// UTILS
-// ===================================================================
-function escHTML(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML;}
-function escAttr(s){return s.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._to);t._to=setTimeout(()=>t.classList.remove('show'),2000);}
+    <!-- ===== Tech Stack ===== -->
+    <section class="section">
+      <h2 class="section-title">✦ 技术栈</h2>
+      <div class="tech-stack">
+        <span class="tech-tag">React</span>
+        <span class="tech-tag">TypeScript</span>
+        <span class="tech-tag">FastAPI</span>
+        <span class="tech-tag">Glassmorphism UI</span>
+        <span class="tech-tag">LLM API 集成</span>
+        <span class="tech-tag">交叉评分算法</span>
+      </div>
+    </section>
 
-init();
-</script>
+    <!-- ===== Footer CTA ===== -->
+    <div class="footer-cta">
+      <div class="footer-cta-title">体验模拟演示</div>
+      <div class="footer-cta-desc">在线 Demo 使用预设数据展示完整对比与评分流程</div>
+      <a href="./app/" class="btn-primary">
+        🚀 立即体验
+      </a>
+    </div>
+
+    <div class="footer-meta">
+      Made by Anthea · Demo 使用预设数据，完整版支持实时 API 调用
+    </div>
+
+  </div>
 </body>
 </html>
